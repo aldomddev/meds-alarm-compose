@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Meds Alarm</string>
+
+    <string name="navigation.today_meds_route" translatable="false">today meds</string>
+    <string name="navigation.my_meds_route" translatable="false">my meds</string>
+
+    <string name="navigation.today_meds_title" >Hoje</string>
+    <string name="navigation_route.my_meds_title">Medicamentos</string>
 </resources>
