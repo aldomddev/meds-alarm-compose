@@ -1,15 +1,11 @@
+import Dependencies.Deps
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
 }
-
-apply(from = "../versions.gradle.kts")
-val composeVersion: String by extra
-val navigation: String by extra
-val hiltVersion: String by extra
-val hiltNavigation: String by extra
 
 android {
     compileSdk = 30
@@ -44,11 +40,11 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+        kotlinCompilerExtensionVersion = Versions.compose
     }
     packagingOptions {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += mutableSetOf("/META-INF/{AL2.0,LGPL2.1}")//"/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
@@ -56,24 +52,25 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation(Deps.androidMaterial)
+    implementation(Deps.androidxAppCompat)
+    implementation(Deps.androidxCore)
+    implementation(Deps.androidxLifecycleRuntime)
     // compose
-    implementation("androidx.activity:activity-compose:1.3.0")
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:$navigation")
-    implementation("androidx.hilt:hilt-navigation-compose:$hiltNavigation")
+    implementation(Deps.androidxActivityCompose)
+    implementation(Deps.androidxComposeUi)
+    implementation(Deps.androidxComposeMaterial)
+    implementation(Deps.androidxComposeUiToolingPreview)
+    implementation(Deps.androidxNavigationCompose)
+    implementation(Deps.androidxHiltNavigationCompose)
     // di
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    implementation(Deps.hiltAndroid)
+    kapt(Deps.hiltAndroidCompiler)
+    // debug
+    debugImplementation(Deps.androidxComposeUiTooling)
     // test
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
-    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    testImplementation(Deps.junit)
+    androidTestImplementation(Deps.androidxJunit)
+    androidTestImplementation(Deps.androidxEspresso)
+    androidTestImplementation(Deps.androidxComposeJunit)
 }
