@@ -1,16 +1,25 @@
 package br.com.amd.medsalarm.ui.widgets
 
-import androidx.compose.material.*
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import br.com.amd.medsalarm.ui.model.NavigationItem
 
 @Composable
 fun BottomNavigationBar(
+    navController: NavController,
     navigationItems: List<NavigationItem>,
     cutoutShape: Shape? = null,
     onItemClicked: (NavigationItem) -> Unit
@@ -18,6 +27,9 @@ fun BottomNavigationBar(
     BottomAppBar(
         cutoutShape = cutoutShape,
         content = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+
             BottomNavigation(
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = Color.White
@@ -31,7 +43,7 @@ fun BottomNavigationBar(
                                 contentDescription = stringResource(id = item.title)
                             )
                         },
-                        selected = index == 0,
+                        selected = currentRoute == item.route,
                         selectedContentColor = Color.White,
                         unselectedContentColor = Color.White.copy(0.4f),
                         alwaysShowLabel = true,
@@ -43,11 +55,11 @@ fun BottomNavigationBar(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun BottomNavigationBarPreview() {
-    BottomNavigationBar(
-        navigationItems = listOf(NavigationItem.TodayMeds, NavigationItem.MyMeds),
-        onItemClicked = { }
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BottomNavigationBarPreview() {
+//    BottomNavigationBar(
+//        navigationItems = listOf(NavigationItem.TodayMeds, NavigationItem.MyMeds),
+//        onItemClicked = { }
+//    )
+//}

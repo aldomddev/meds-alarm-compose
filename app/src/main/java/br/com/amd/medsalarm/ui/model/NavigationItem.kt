@@ -5,19 +5,19 @@ import androidx.annotation.StringRes
 import br.com.amd.medsalarm.R
 
 sealed class NavigationItem(
-    @StringRes val route: Int,
+    val route: String,
     @StringRes val title: Int,
     @DrawableRes val icon: Int
 ) {
     object TodayMeds : NavigationItem(
-        route = R.string.navigation_today_meds_route,
+        route = "TodayMeds",
         title = R.string.navigation_today_meds_title,
         icon = R.drawable.ic_today
     )
 
     object MyMeds : NavigationItem(
-        route = R.string.navigation_my_meds_route,
-        title = R.string.navigation_route_my_meds_title,
+        route = "MyMeds",
+        title = R.string.navigation_my_meds_title,
         icon = R.drawable.ic_medication
     )
 }
