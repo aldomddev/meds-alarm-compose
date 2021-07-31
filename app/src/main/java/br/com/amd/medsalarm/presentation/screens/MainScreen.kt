@@ -7,13 +7,16 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Shape
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -22,21 +25,23 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.amd.medsalarm.presentation.model.NavigationItem
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(title: String) {
     val fabShape = RoundedCornerShape(50)
     val navController = rememberNavController()
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
-        topBar = { GetTopAppBar(title) },
+        scaffoldState = scaffoldState,
+        topBar = { GetTopAppBar(title = title, scaffoldState = scaffoldState) },
         floatingActionButton = { GetFloatingActionButton(fabShape) },
         bottomBar = { GetBottomBar(navController = navController, fabShape = fabShape) },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
-        content = {
-            Navigator(navController = navController)
-        }
+        drawerContent = { Text("Empty drawer") },
+        content = { Navigator(navController = navController) }
     )
 }
 
@@ -54,24 +59,35 @@ fun Navigator(navController: NavHostController) {
 }
 
 @Composable
-private fun GetTopAppBar(title: String) {
+private fun GetTopAppBar(
+    title: String,
+    scaffoldState: ScaffoldState
+) {
+    val coroutineScope = rememberCoroutineScope()
+
     TopAppBar(
         title = {
             Text(text = title)
         },
         navigationIcon = {
             IconButton(
-                onClick = { }
-            ) {
-                Icon(Icons.Filled.Menu, contentDescription = "")
-            }
+                content = {
+                    Icon(Icons.Filled.Menu, contentDescription = "")
+                },
+                onClick = {
+                    coroutineScope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }
+            )
         },
         actions = {
             IconButton(
+                content = {
+                    Icon(Icons.Filled.Notifications, contentDescription = "")
+                },
                 onClick = { }
-            ) {
-                Icon(Icons.Filled.Notifications, contentDescription = "")
-            }
+            )
         },
         elevation = AppBarDefaults.TopAppBarElevation
     )
