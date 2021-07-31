@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm.ui.screens
+package br.com.amd.medsalarm.presentation.screens
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AppBarDefaults
@@ -20,7 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.amd.medsalarm.ui.model.NavigationItem
+import br.com.amd.medsalarm.presentation.model.NavigationItem
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
 
 @Composable

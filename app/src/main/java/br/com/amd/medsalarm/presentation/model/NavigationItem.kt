@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm.ui.model
+package br.com.amd.medsalarm.presentation.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

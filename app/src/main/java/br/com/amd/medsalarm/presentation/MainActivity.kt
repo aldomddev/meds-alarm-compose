@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm
+package br.com.amd.medsalarm.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,7 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import br.com.amd.medsalarm.ui.screens.MainScreen
+import br.com.amd.medsalarm.presentation.screens.MainScreen
 import br.com.amd.medsalarm.ui.theme.MedsAlarmTheme
 
 class MainActivity : ComponentActivity() {

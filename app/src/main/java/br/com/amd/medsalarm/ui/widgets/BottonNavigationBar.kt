@@ -12,10 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import br.com.amd.medsalarm.ui.model.NavigationItem
+import br.com.amd.medsalarm.presentation.model.NavigationItem
 
 @Composable
 fun BottomNavigationBar(
@@ -34,7 +33,7 @@ fun BottomNavigationBar(
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = Color.White
             ) {
-                navigationItems.forEachIndexed { index, item ->
+                navigationItems.forEach { item ->
                     BottomNavigationItem(
                         label = { Text(text = stringResource(id = item.title)) },
                         icon = {

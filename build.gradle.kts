@@ -13,7 +13,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.0.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
 
-        classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.hiltAndroid}")
+        classpath(Dependencies.BuildPlugins.daggerHiltAndroidGradle)
         classpath(Dependencies.BuildPlugins.gradleVersionsClasspath)
 
         // NOTE: Do not place your application dependencies here; they belong

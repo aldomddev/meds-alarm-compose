@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm.ui.screens
+package br.com.amd.medsalarm.presentation.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text

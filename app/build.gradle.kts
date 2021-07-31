@@ -1,10 +1,10 @@
 import Dependencies.Deps
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    id(Dependencies.BuildPlugins.androidApplication)
+    id(Dependencies.BuildPlugins.kotlinAndroid)
+    id(Dependencies.BuildPlugins.kotlinKapt)
+    id(Dependencies.BuildPlugins.daggerHiltAndroid)
 }
 
 android {
@@ -44,7 +44,7 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += mutableSetOf("/META-INF/{AL2.0,LGPL2.1}")//"/META-INF/{AL2.0,LGPL2.1}"
+            excludes += mutableSetOf("/META-INF/{AL2.0,LGPL2.1}", "DebugProbesKt.bin")
         }
     }
 }
@@ -55,22 +55,12 @@ dependencies {
     implementation(Deps.androidMaterial)
     implementation(Deps.androidxAppCompat)
     implementation(Deps.androidxCore)
-    implementation(Deps.androidxLifecycleRuntime)
-    // compose
-    implementation(Deps.androidxActivityCompose)
-    implementation(Deps.androidxComposeUi)
-    implementation(Deps.androidxComposeMaterial)
-    implementation(Deps.androidxComposeUiToolingPreview)
-    implementation(Deps.androidxNavigationCompose)
-    implementation(Deps.androidxHiltNavigationCompose)
-    // di
-    implementation(Deps.hiltAndroid)
-    kapt(Deps.hiltAndroidCompiler)
-    // debug
-    debugImplementation(Deps.androidxComposeUiTooling)
+    // libs
+    dependOnCoroutines()
+    dependOnLifecycle()
+    dependOnCompose()
+    dependOnHilt()
+    dependOnRoom()
     // test
-    testImplementation(Deps.junit)
-    androidTestImplementation(Deps.androidxJunit)
-    androidTestImplementation(Deps.androidxEspresso)
-    androidTestImplementation(Deps.androidxComposeJunit)
+    dependOnTests()
 }
