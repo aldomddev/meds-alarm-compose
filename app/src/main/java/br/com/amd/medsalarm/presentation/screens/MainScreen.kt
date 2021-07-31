@@ -34,9 +34,10 @@ fun MainScreen(title: String) {
         bottomBar = { GetBottomBar(navController = navController, fabShape = fabShape) },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
-    ) {
-        Navigator(navController = navController)
-    }
+        content = {
+            Navigator(navController = navController)
+        }
+    )
 }
 
 @Composable
