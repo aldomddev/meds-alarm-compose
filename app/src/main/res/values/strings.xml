@@ -3,4 +3,15 @@
 
     <string name="navigation.today_meds_title" >Hoje</string>
     <string name="navigation.my_meds_title">Medicamentos</string>
+
+    <string name="medication_details.medication">Medicamento</string>
+    <string name="medication_details.medication_placeholder">Tilenol</string>
+    <string name="medication_details.description">Descrição</string>
+    <string name="medication_details.description_placeholder">Tomar 1 comprimido</string>
+    <string name="medication_details.start_on">Iniciar em</string>
+    <string name="medication_details.ends_on">Finalizar em</string>
+
+    <string name="medication_details_dialog.title">Selecione a data e hora de início</string>
+    <string name="medication_details_dialog.positive_button">Selecionar</string>
+    <string name="medication_details_dialog.negative_button">Cancelar</string>
 </resources>

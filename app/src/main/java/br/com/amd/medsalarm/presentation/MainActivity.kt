@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.amd.medsalarm.presentation.screens.MainScreen
 import br.com.amd.medsalarm.ui.theme.MedsAlarmTheme
+import br.com.amd.medsalarm.ui.widgets.DateTimePickerDialog
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

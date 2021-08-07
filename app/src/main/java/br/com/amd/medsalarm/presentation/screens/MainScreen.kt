@@ -49,7 +49,7 @@ fun MainScreen(title: String) {
 fun Navigator(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
         composable(NavigationItem.TodayMeds.route) {
-            TodayMedsScreen()
+            MedicationDetailScreen()
         }
 
         composable(NavigationItem.MyMeds.route) {

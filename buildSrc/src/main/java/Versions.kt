@@ -1,5 +1,5 @@
 object Versions {
-    const val compose = "1.0.0"
+    const val compose = "1.0.1"
 
     const val androidMaterial = "1.4.0"
 
