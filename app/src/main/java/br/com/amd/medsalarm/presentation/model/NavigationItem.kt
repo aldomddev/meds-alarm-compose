@@ -20,4 +20,10 @@ sealed class NavigationItem(
         title = R.string.navigation_my_meds_title,
         icon = R.drawable.ic_medication
     )
+
+    object MedsDetail : NavigationItem(
+        route = "MedsDetail",
+        title = R.string.navigation_my_meds_title,
+        icon = R.drawable.ic_medication
+    )
 }

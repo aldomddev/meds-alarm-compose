@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.amd.medsalarm.presentation.model.NavigationItem
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
@@ -36,7 +37,13 @@ fun MainScreen(title: String) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { GetTopAppBar(title = title, scaffoldState = scaffoldState) },
-        floatingActionButton = { GetFloatingActionButton(fabShape) },
+        floatingActionButton = {
+            GetFloatingActionButton(
+                navController = navController,
+                fabShape = fabShape,
+                onAddButtonClicked = { navController.navigate(NavigationItem.MedsDetail.route) }
+            )
+        },
         bottomBar = { GetBottomBar(navController = navController, fabShape = fabShape) },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
@@ -46,14 +53,24 @@ fun MainScreen(title: String) {
 }
 
 @Composable
+private fun showBottomBar(navController: NavController): Boolean {
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    return navBackStackEntry.value?.destination?.route != NavigationItem.MedsDetail.route
+}
+
+@Composable
 fun Navigator(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
         composable(NavigationItem.TodayMeds.route) {
-            MedicationDetailScreen()
+            TodayMedsScreen()
         }
 
         composable(NavigationItem.MyMeds.route) {
             MedicationsScreen()
+        }
+
+        composable(NavigationItem.MedsDetail.route) {
+            MedicationDetailScreen()
         }
     }
 }
@@ -98,34 +115,42 @@ private fun GetBottomBar(
     navController: NavController,
     fabShape: RoundedCornerShape
 ) {
-    BottomNavigationBar(
-        navController = navController,
-        navigationItems = listOf(NavigationItem.TodayMeds, NavigationItem.MyMeds),
-        cutoutShape = fabShape,
-        onItemClicked = { destination ->
-            navController.navigate(destination.route) {
-                // Pop up to the start destination of the graph to
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                navController.graph.startDestinationRoute?.let { route ->
-                    popUpTo(route) { saveState = true }
+    if (showBottomBar(navController)) {
+        BottomNavigationBar(
+            navController = navController,
+            navigationItems = listOf(NavigationItem.TodayMeds, NavigationItem.MyMeds),
+            cutoutShape = fabShape,
+            onItemClicked = { destination ->
+                navController.navigate(destination.route) {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) { saveState = true }
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
                 }
-                // Avoid multiple copies of the same destination when
-                // reselecting the same item
-                launchSingleTop = true
-                // Restore state when reselecting a previously selected item
-                restoreState = true
             }
-        }
-    )
+        )
+    }
 }
 
 @Composable
-private fun GetFloatingActionButton(fabShape: Shape) {
-    FloatingActionButton(
-        onClick = { },
-        shape = fabShape,
-    ) {
-        Icon(Icons.Filled.Add,"")
+private fun GetFloatingActionButton(
+    navController: NavController,
+    fabShape: Shape,
+    onAddButtonClicked: () -> Unit
+) {
+    if (showBottomBar(navController)) {
+        FloatingActionButton(
+            onClick = { onAddButtonClicked.invoke() },
+            shape = fabShape,
+        ) {
+            Icon(Icons.Filled.Add,"")
+        }
     }
 }

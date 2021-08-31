@@ -2,6 +2,7 @@ package br.com.amd.medsalarm.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +40,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.amd.medsalarm.R
+import br.com.amd.medsalarm.ui.theme.MedsAlarmTheme
 import br.com.amd.medsalarm.ui.widgets.DateTimePickerDialog
 
 @Composable
@@ -240,23 +243,57 @@ private fun CustomRepeatingInterval(
 ) {
     if (isVisible) {
         Row(
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Button(onClick = { }) {
-                Image(painter = painterResource(id = R.drawable.ic_plus), contentDescription = "")
-            }
+            //Button(onClick = { }) {
+//            Image(
+//                modifier = Modifier.padding(16.dp),
+//                painter = painterResource(id = R.drawable.ic_plus),
+//                colorFilter = ColorFilter.tint(Color.Black),
+//                contentDescription = ""
+//            )
+            //}
 
             TextField(
                 value = "24",
-                modifier = Modifier.width(100.dp),
+                modifier = Modifier.width(130.dp),
+                trailingIcon = {
+                    Image(
+                        modifier = Modifier.padding(8.dp).clickable {  },
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        contentDescription = ""
+                    )
+                },
+                leadingIcon = {
+                    Image(
+                        modifier = Modifier.padding(8.dp).clickable {  },
+                        painter = painterResource(id = R.drawable.ic_minus),
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        contentDescription = ""
+                    )
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.Gray,
+                    disabledTextColor = Color.Transparent,
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
                 onValueChange = { }
             )
 
-            Button(onClick = { }) {
-                Image(painter = painterResource(id = R.drawable.ic_minus), contentDescription = "")
-            }
+            //Button(onClick = { }) {
+//                Image(
+//                    modifier = Modifier.padding(16.dp),
+//                    painter = painterResource(id = R.drawable.ic_minus),
+//                    colorFilter = ColorFilter.tint(Color.Black),
+//                    contentDescription = ""
+//                )
+            //}
         }
     }
 }
