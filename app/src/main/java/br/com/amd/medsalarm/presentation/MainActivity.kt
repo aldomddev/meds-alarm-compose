@@ -15,11 +15,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MedsAlarmTheme {
+            MedsAlarmTheme(darkTheme = false) {
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
+                //Surface(color = MaterialTheme.colors.background) {
                     MainScreen("Bottom app bar + FAB")
-                }
+                //}
             }
         }
     }

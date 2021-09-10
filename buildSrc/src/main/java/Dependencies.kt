@@ -46,6 +46,8 @@ object Dependencies {
         const val androidxRoomRuntime = "androidx.room:room-runtime:${Versions.androidxRoom}"
         const val androidxRoomTesting = "androidx.room:room-testing:${Versions.androidxRoom}"
 
+        const val materialDialogsDateTime = "io.github.vanpra.compose-material-dialogs:datetime:${Versions.materialDialogsDateTime}"
+
         const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hiltAndroid}"
         const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hiltAndroid}"
         const val jetBrainsCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.jetBrainsCoroutines}"

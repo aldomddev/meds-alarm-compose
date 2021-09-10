@@ -14,12 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,8 +36,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.amd.medsalarm.R
-import br.com.amd.medsalarm.ui.theme.MedsAlarmTheme
-import br.com.amd.medsalarm.ui.widgets.DateTimePickerDialog
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.datetime.time.timepicker
 
 @Composable
 fun MedicationDetailScreen() {
@@ -50,18 +47,45 @@ fun MedicationDetailScreen() {
     var startsOn by remember { mutableStateOf(TextFieldValue("")) }
     var endsOn by remember { mutableStateOf(TextFieldValue("")) }
 
-    val focusRequester = FocusRequester()
+    val focusRequester = remember { FocusRequester() }
     var showStartsOnDateTimeDialog by remember { mutableStateOf(false) }
-    var permanent by remember { mutableStateOf(false) }
+    var permanent by remember { mutableStateOf(true) }
     var showsEndsOnDateTimeDialog by remember { mutableStateOf(false) }
-    DateTimePickerDialog(
-        showDialog = (showStartsOnDateTimeDialog || showsEndsOnDateTimeDialog),
-        onDialogClosed = {
-            showStartsOnDateTimeDialog = false
-            showsEndsOnDateTimeDialog = false
-            focusRequester.freeFocus()
+
+    val timePicker = remember { MaterialDialog() }
+    timePicker.build(
+        buttons = {
+            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
+            negativeButton(stringResource(id = R.string.medication_details_dialog_negative_button))
         }
-    )
+    ) {
+        timepicker(
+            title = stringResource(id = R.string.medication_details_dialog_title),
+            onTimeChange = { time ->
+                println("AMD - $time")
+            }
+        )
+    }
+
+    val datePicker = remember { MaterialDialog() }
+    datePicker.build(
+        buttons = {
+            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
+            negativeButton(stringResource(id = R.string.medication_details_dialog_negative_button))
+        }
+    ) {
+        datepicker(
+            title = stringResource(id = R.string.medication_details_dialog_title),
+            onDateChange = { date ->
+                println("AMD - $date")
+                timePicker.show()
+            }
+        )
+    }
+
+    if (showStartsOnDateTimeDialog || showsEndsOnDateTimeDialog) {
+        datePicker.show()
+    }
 
     var repeatingSelection by remember { mutableStateOf("6") }
     val scrollState = rememberScrollState()
@@ -71,6 +95,7 @@ fun MedicationDetailScreen() {
         .fillMaxWidth()
         .verticalScroll(scrollState)) {
 
+        // medication
         TextField(
             value = medication,
             onValueChange = { medication = it },
@@ -90,6 +115,7 @@ fun MedicationDetailScreen() {
             )
         )
 
+        // description
         TextField(
             value = description,
             onValueChange = { description = it },
@@ -110,6 +136,7 @@ fun MedicationDetailScreen() {
             )
         )
 
+        // starts on
         TextField(
             value = startsOn,
             onValueChange = { startsOn = it },
@@ -150,30 +177,32 @@ fun MedicationDetailScreen() {
             Text(text = "Permanente")
         }
 
-        TextField(
-            enabled = permanent,
-            value = endsOn,
-            onValueChange = { endsOn = it },
-            readOnly = true,
-            singleLine = true,
-            label = { Text(text = stringResource(id = R.string.medication_details_ends_on)) },
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .fillMaxWidth()
-                .border(1.dp, Color.LightGray, RoundedCornerShape(10))
-                .focusRequester(focusRequester)
-                .onFocusChanged { showsEndsOnDateTimeDialog = it.hasFocus }
-                .focusTarget()
-                .pointerInput(Unit) { detectTapGestures { focusRequester.requestFocus() } },
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.Gray,
-                disabledTextColor = Color.Transparent,
-                backgroundColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
+        // ends on
+        if (!permanent) {
+            TextField(
+                value = endsOn,
+                onValueChange = { endsOn = it },
+                readOnly = true,
+                singleLine = true,
+                label = { Text(text = stringResource(id = R.string.medication_details_ends_on)) },
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .fillMaxWidth()
+                    .border(1.dp, Color.LightGray, RoundedCornerShape(10))
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { showsEndsOnDateTimeDialog = it.hasFocus }
+                    .focusTarget()
+                    .pointerInput(Unit) { detectTapGestures { focusRequester.requestFocus() } },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.Gray,
+                    disabledTextColor = Color.Transparent,
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                )
             )
-        )
+        }
 
         RepeatingIntervalRadioGroup(
             items = listOf("4", "6", "8", "12", "Outro"),
@@ -181,22 +210,28 @@ fun MedicationDetailScreen() {
             onSelectionChanged = { repeatingSelection = it }
         )
 
-        CustomRepeatingInterval(isVisible = true)
+        if (repeatingSelection == "Outro") {
+            CustomRepeatingInterval(isVisible = true)
+        }
 
-        Row(
+        // save
+        Button(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .padding(top = 48.dp)
+                .fillMaxWidth(),
+            onClick = { }
         ) {
-            Button(onClick = { }) {
-                Text("Salvar")
-            }
+            Text("Salvar")
+        }
 
-            Button(onClick = { }) {
-                Text("Cancelar")
-            }
+        // cancel
+        OutlinedButton(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth(),
+            onClick = { }
+        ) {
+            Text("Cancelar")
         }
     }
 }
@@ -243,7 +278,9 @@ private fun CustomRepeatingInterval(
 ) {
     if (isVisible) {
         Row(
-            modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
@@ -261,7 +298,9 @@ private fun CustomRepeatingInterval(
                 modifier = Modifier.width(130.dp),
                 trailingIcon = {
                     Image(
-                        modifier = Modifier.padding(8.dp).clickable {  },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable { },
                         painter = painterResource(id = R.drawable.ic_plus),
                         colorFilter = ColorFilter.tint(Color.Black),
                         contentDescription = ""
@@ -269,7 +308,9 @@ private fun CustomRepeatingInterval(
                 },
                 leadingIcon = {
                     Image(
-                        modifier = Modifier.padding(8.dp).clickable {  },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable { },
                         painter = painterResource(id = R.drawable.ic_minus),
                         colorFilter = ColorFilter.tint(Color.Black),
                         contentDescription = ""

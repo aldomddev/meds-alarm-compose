@@ -36,7 +36,7 @@ fun MainScreen(title: String) {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { GetTopAppBar(title = title, scaffoldState = scaffoldState) },
+        topBar = { TopBar(title = title, scaffoldState = scaffoldState) },
         floatingActionButton = {
             GetFloatingActionButton(
                 navController = navController,
@@ -44,7 +44,7 @@ fun MainScreen(title: String) {
                 onAddButtonClicked = { navController.navigate(NavigationItem.MedsDetail.route) }
             )
         },
-        bottomBar = { GetBottomBar(navController = navController, fabShape = fabShape) },
+        bottomBar = { BottomBar(navController = navController, fabShape = fabShape) },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
         drawerContent = { Text("Empty drawer") },
@@ -59,7 +59,7 @@ private fun showBottomBar(navController: NavController): Boolean {
 }
 
 @Composable
-fun Navigator(navController: NavHostController) {
+private fun Navigator(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
         composable(NavigationItem.TodayMeds.route) {
             TodayMedsScreen()
@@ -76,7 +76,7 @@ fun Navigator(navController: NavHostController) {
 }
 
 @Composable
-private fun GetTopAppBar(
+private fun TopBar(
     title: String,
     scaffoldState: ScaffoldState
 ) {
@@ -111,7 +111,7 @@ private fun GetTopAppBar(
 }
 
 @Composable
-private fun GetBottomBar(
+private fun BottomBar(
     navController: NavController,
     fabShape: RoundedCornerShape
 ) {

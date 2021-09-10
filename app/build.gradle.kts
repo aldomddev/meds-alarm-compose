@@ -30,6 +30,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -56,6 +57,10 @@ dependencies {
     implementation(Deps.androidMaterial)
     implementation(Deps.androidxAppCompat)
     implementation(Deps.androidxCore)
+    // for java.time support
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    // date time non-official dialogs
+    implementation(Deps.materialDialogsDateTime)
     // libs
     dependOnCoroutines()
     dependOnLifecycle()

@@ -9,29 +9,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import br.com.amd.medsalarm.R
 import br.com.amd.medsalarm.databinding.DatePickerBinding
+import br.com.amd.medsalarm.presentation.screens.MedicationDetailScreen
 
 @Composable
 fun DateTimePickerDialog(
     showDialog: Boolean = false,
-    onDialogClosed: (DialogDismissedState) -> Unit
+    onDialogClosed: ((DialogDismissedState) -> Unit)? = null
 ) {
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = { onDialogClosed.invoke(DialogDismissedState.DismissRequested) },
+            onDismissRequest = { onDialogClosed?.invoke(DialogDismissedState.DismissRequested) },
             title = { Text(text = stringResource(id = R.string.medication_details_dialog_title)) },
             buttons = {
                 DialogButtons(
-                    onPositiveButtonClick = { onDialogClosed.invoke(DialogDismissedState.PositiveButtonClicked) },
-                    onNegativeButtonClick = { onDialogClosed.invoke(DialogDismissedState.NegativeButtonClicked) }
+                    onPositiveButtonClick = { onDialogClosed?.invoke(DialogDismissedState.PositiveButtonClicked) },
+                    onNegativeButtonClick = { onDialogClosed?.invoke(DialogDismissedState.NegativeButtonClicked) }
                 )
             },
             text = {
@@ -75,4 +78,10 @@ sealed class DialogDismissedState {
 
 private fun onDateChanged(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
     println("AMD - ahaaa")
+}
+
+@Composable
+@Preview(showBackground = true)
+fun MedicationDetailScreenPreview() {
+    DateTimePickerDialog()
 }
