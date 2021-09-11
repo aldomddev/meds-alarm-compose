@@ -1,7 +1,8 @@
 package br.com.amd.medsalarm.presentation.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
@@ -23,43 +24,56 @@ import java.time.LocalDateTime
 @ExperimentalMaterialApi
 @Composable
 fun TodayMedsScreen(
-    viewModel: TodayMedsViewModel
+    viewModel: TodayMedsViewModel,
+    onItemClick: (Int) -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val alarmsLifecycleAware = remember(viewModel.state, lifecycleOwner) {
-        viewModel.state.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-    }.collectAsState(TodayMedsViewModel.ViewState.Empty)
+    val alarmsLifecycleAware = remember(viewModel.viewState, lifecycleOwner) {
+        viewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }.collectAsState(TodayMedsViewModel.ViewState.Loading)
 
     when(alarmsLifecycleAware.value) {
         TodayMedsViewModel.ViewState.Empty -> Text("Empty")
-        TodayMedsViewModel.ViewState.Error -> TODO()
-        is TodayMedsViewModel.ViewState.Loaded -> MedsAlarmList(alarms = (alarmsLifecycleAware.value as TodayMedsViewModel.ViewState.Loaded).data)
-        TodayMedsViewModel.ViewState.Loading -> TODO()
+        TodayMedsViewModel.ViewState.Error -> {}
+        is TodayMedsViewModel.ViewState.Loaded -> {
+            MedsAlarmList(
+                alarms = (alarmsLifecycleAware.value as TodayMedsViewModel.ViewState.Loaded).data,
+                onItemClick = onItemClick
+            )
+        }
+        TodayMedsViewModel.ViewState.Loading -> {}
     }
 }
 
 @ExperimentalMaterialApi
 @Composable
-private fun MedsAlarmList(alarms: List<MedsAlarmVO>) {
+private fun MedsAlarmList(
+    alarms: List<MedsAlarmVO>,
+    onItemClick: (Int) -> Unit
+) {
     LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        contentPadding = PaddingValues(all = 8.dp),
         content = {
             items(alarms) { alarm ->
-                MedsAlarmItem(alarmVO = alarm, onClick = {})
+                MedsAlarmItem(
+                    alarmVO = alarm,
+                    onClick = onItemClick
+                )
             }
         }
     )
 }
 
-@ExperimentalMaterialApi
+@ExperimentalMaterialApi // added because of Card
 @Composable
 private fun MedsAlarmItem(
     alarmVO: MedsAlarmVO,
     onClick: (Int) -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(all = 16.dp),
+        modifier = Modifier.fillMaxWidth(),
+        elevation = 5.dp,
         onClick = { onClick(alarmVO.id) }
     ) {
         Text(alarmVO.medication)

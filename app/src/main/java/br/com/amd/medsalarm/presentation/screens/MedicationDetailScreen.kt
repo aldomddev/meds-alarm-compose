@@ -41,7 +41,9 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 
 @Composable
-fun MedicationDetailScreen() {
+fun MedicationDetailScreen(
+    medsAlarmId: Int
+) {
     var medication by remember { mutableStateOf(TextFieldValue("")) }
     var description by remember { mutableStateOf(TextFieldValue("")) }
     var startsOn by remember { mutableStateOf(TextFieldValue("")) }
@@ -342,5 +344,5 @@ private fun CustomRepeatingInterval(
 @Composable
 @Preview(showBackground = true)
 fun MedicationDetailScreenPreview() {
-    MedicationDetailScreen()
+    MedicationDetailScreen(medsAlarmId = 0)
 }

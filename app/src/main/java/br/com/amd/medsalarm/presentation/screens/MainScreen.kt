@@ -12,10 +12,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import br.com.amd.medsalarm.presentation.model.NavigationItem
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
 import kotlinx.coroutines.launch
@@ -23,7 +21,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(title: String) {
-    val fabShape = RoundedCornerShape(50)
+    val fabShape = RoundedCornerShape(percent = 50)
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
@@ -48,7 +46,7 @@ fun MainScreen(title: String) {
 @Composable
 private fun showBottomBar(navController: NavController): Boolean {
     val navBackStackEntry = navController.currentBackStackEntryAsState()
-    return navBackStackEntry.value?.destination?.route != NavigationItem.MedsDetail.route
+    return navBackStackEntry.value?.destination?.route?.contains(NavigationItem.MedsDetail.route) == false
 }
 
 @ExperimentalMaterialApi
@@ -56,15 +54,29 @@ private fun showBottomBar(navController: NavController): Boolean {
 private fun Navigator(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
         composable(NavigationItem.TodayMeds.route) {
-            TodayMedsScreen(viewModel = hiltViewModel())
+            TodayMedsScreen(
+                viewModel = hiltViewModel(),
+                onItemClick = { itemId ->
+                    navController.navigate(NavigationItem.MedsDetail.route.plus("$itemId"))
+                }
+            )
         }
 
         composable(NavigationItem.MyMeds.route) {
             MedicationsScreen()
         }
 
-        composable(NavigationItem.MedsDetail.route) {
-            MedicationDetailScreen()
+        composable(
+            route = NavigationItem.MedsDetail.route.plus("{id}"),
+            arguments = listOf(navArgument(name = "id") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: 0
+            println("AMD - id=$id")
+            MedicationDetailScreen(medsAlarmId = id)
         }
     }
 }

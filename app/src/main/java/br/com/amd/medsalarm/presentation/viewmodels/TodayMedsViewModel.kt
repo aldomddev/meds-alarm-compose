@@ -7,6 +7,7 @@ import br.com.amd.medsalarm.presentation.mappers.toPresenter
 import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDateTime
@@ -18,15 +19,20 @@ class TodayMedsViewModel @Inject constructor (
     private val getAllAlarmsUseCase: GetAllAlarmsUseCase
 ) : ViewModel() {
 
-    val state: Flow<ViewState> = flow {
-        getAllAlarmsUseCase().collect { alarms ->
-            if (alarms.isEmpty()) {
-                //emit(ViewState.Empty)
-                emit(ViewState.Loaded(dummyAlarms().toPresenter()))
-            } else {
-                emit(ViewState.Loaded(alarms.toPresenter()))
+    val viewState: Flow<ViewState> = flow {
+        getAllAlarmsUseCase()
+            .catch { exception ->
+                println(exception)
+                emit(ViewState.Error)
             }
-        }
+            .collect { alarms ->
+                if (alarms.isEmpty()) {
+                    //emit(ViewState.Empty)
+                    emit(ViewState.Loaded(dummyAlarms().toPresenter()))
+                } else {
+                    emit(ViewState.Loaded(alarms.toPresenter()))
+                }
+            }
     }
 
     private fun dummyAlarms(): List<MedsAlarm> {

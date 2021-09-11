@@ -10,19 +10,19 @@ sealed class NavigationItem(
     @DrawableRes val icon: Int
 ) {
     object TodayMeds : NavigationItem(
-        route = "TodayMeds",
+        route = "todayMeds",
         title = R.string.navigation_today_meds_title,
         icon = R.drawable.ic_today
     )
 
     object MyMeds : NavigationItem(
-        route = "MyMeds",
+        route = "myMeds",
         title = R.string.navigation_my_meds_title,
         icon = R.drawable.ic_medication
     )
 
     object MedsDetail : NavigationItem(
-        route = "MedsDetail",
+        route = "medsDetail?id=",
         title = R.string.navigation_my_meds_title,
         icon = R.drawable.ic_medication
     )
