@@ -10,7 +10,7 @@ interface MedsAlarmDao {
     fun all(): Flow<List<MedsAlarmEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(alarm: MedsAlarmEntity)
+    fun saveOrUpdate(alarm: MedsAlarmEntity)
 
     @Delete
     fun delete(alarm: MedsAlarmEntity)

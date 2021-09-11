@@ -17,7 +17,7 @@ class MedsAlarmDataRepository @Inject constructor(
     }
 
     override suspend fun saveOrUpdate(alarm: MedsAlarm) {
-        dao.save(alarm.toEntity())
+        dao.saveOrUpdate(alarm.toEntity())
     }
 
     override suspend fun delete(alarm: MedsAlarm) {
