@@ -7,6 +7,7 @@ import br.com.amd.medsalarm.domain.model.MedsAlarm
 import br.com.amd.medsalarm.domain.repository.MedsAlarmRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class MedsAlarmDataRepository @Inject constructor(
@@ -14,6 +15,15 @@ class MedsAlarmDataRepository @Inject constructor(
 ): MedsAlarmRepository {
     override suspend fun observesAll(): Flow<List<MedsAlarm>> {
         return dao.all().transform { alarm -> emit(alarm.toDomain()) }
+    }
+
+    override suspend fun findNextAlarmsForPeriod(
+        from: LocalDateTime,
+        to: LocalDateTime,
+        enabled: Boolean,
+        seen: Boolean
+    ): List<MedsAlarm> {
+        return dao.findNextAlarmsForPeriod(from, to, enabled, seen).toDomain()
     }
 
     override suspend fun saveOrUpdate(alarm: MedsAlarm) {

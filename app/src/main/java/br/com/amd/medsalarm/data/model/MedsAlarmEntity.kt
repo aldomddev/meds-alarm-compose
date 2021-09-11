@@ -15,7 +15,9 @@ data class MedsAlarmEntity(
     @NonNull @ColumnInfo(name = "description") val description: String = "",
     @NonNull @ColumnInfo(name = "starts_on") val startsOn: LocalDateTime,
     @ColumnInfo(name = "ends_on") val endsOn: LocalDateTime? = null,
+    @ColumnInfo(name = "next") val next: LocalDateTime? = null,
     @NonNull @ColumnInfo(name = "repeating_interval") val repeatingInterval: RepeatingInterval = RepeatingInterval.EIGHT,
     @NonNull @ColumnInfo(name = "repeating_interval_unit") val repeatingIntervalUnit: RepeatingIntervalUnit = RepeatingIntervalUnit.HOUR,
+    @NonNull @ColumnInfo(name = "enabled") val enabled: Boolean = true,
     @NonNull @ColumnInfo(name = "seen") val seen: Boolean = false
 )

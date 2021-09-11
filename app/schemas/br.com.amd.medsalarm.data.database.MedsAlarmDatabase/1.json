@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2e64de5528039e082d23d53f545b1cc2",
+    "identityHash": "8b5f00c83fdf0c9b2ff71e24418ec72c",
     "entities": [
       {
         "tableName": "meds_alarm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication` TEXT NOT NULL, `description` TEXT NOT NULL, `starts_on` TEXT NOT NULL, `ends_on` TEXT, `repeating_interval` INTEGER NOT NULL, `repeating_interval_unit` INTEGER NOT NULL, `seen` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication` TEXT NOT NULL, `description` TEXT NOT NULL, `starts_on` TEXT NOT NULL, `ends_on` TEXT, `next` TEXT, `repeating_interval` INTEGER NOT NULL, `repeating_interval_unit` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `seen` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,6 +39,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "next",
+            "columnName": "next",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "repeatingInterval",
             "columnName": "repeating_interval",
             "affinity": "INTEGER",
@@ -47,6 +53,12 @@
           {
             "fieldPath": "repeatingIntervalUnit",
             "columnName": "repeating_interval_unit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enabled",
+            "columnName": "enabled",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -70,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2e64de5528039e082d23d53f545b1cc2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8b5f00c83fdf0c9b2ff71e24418ec72c')"
     ]
   }
 }

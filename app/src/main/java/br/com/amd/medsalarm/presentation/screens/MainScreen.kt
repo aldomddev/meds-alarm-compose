@@ -43,12 +43,6 @@ fun MainScreen(title: String) {
     )
 }
 
-@Composable
-private fun showBottomBar(navController: NavController): Boolean {
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
-    return navBackStackEntry.value?.destination?.route?.contains(NavigationItem.MedsDetail.route) == false
-}
-
 @ExperimentalMaterialApi
 @Composable
 private fun Navigator(navController: NavHostController) {
@@ -159,4 +153,10 @@ private fun GetFloatingActionButton(
             Icon(Icons.Filled.Add,"")
         }
     }
+}
+
+@Composable
+private fun showBottomBar(navController: NavController): Boolean {
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    return navBackStackEntry.value?.destination?.route?.contains(NavigationItem.MedsDetail.route) == false
 }

@@ -8,6 +8,7 @@ data class MedsAlarm(
     val description: String = "",
     val startsOn: LocalDateTime,
     val endsOn: LocalDateTime? = null,
+    val next: LocalDateTime? = null,
     val repeatingInterval: RepeatingInterval = RepeatingInterval.EIGHT,
     val repeatingIntervalUnit: RepeatingIntervalUnit = RepeatingIntervalUnit.HOUR,
     val seen: Boolean = false
