@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm.data.model
+package br.com.amd.medsalarm.domain.model
 
 enum class RepeatingInterval(val interval: Int) {
     CUSTOM(-1),

@@ -3,8 +3,7 @@ package br.com.amd.medsalarm.data.mappers
 import br.com.amd.medsalarm.data.model.MedsAlarmEntity
 import br.com.amd.medsalarm.domain.model.MedsAlarm
 
-fun MedsAlarmEntity.toDomain(): MedsAlarm {
-    return MedsAlarm(
+fun MedsAlarmEntity.toDomain() = MedsAlarm(
         id = id,
         medication = medication,
         description = description,
@@ -14,12 +13,10 @@ fun MedsAlarmEntity.toDomain(): MedsAlarm {
         repeatingIntervalUnit = repeatingIntervalUnit,
         seen = seen
     )
-}
 
 fun List<MedsAlarmEntity>.toDomain() = map { it.toDomain() }
 
-fun MedsAlarm.toEntity(): MedsAlarmEntity {
-    return MedsAlarmEntity(
+fun MedsAlarm.toEntity() = MedsAlarmEntity(
         id = id,
         medication = medication,
         description = description,
@@ -29,6 +26,5 @@ fun MedsAlarm.toEntity(): MedsAlarmEntity {
         repeatingIntervalUnit = repeatingIntervalUnit,
         seen = seen
     )
-}
 
 fun List<MedsAlarm>.toEntity() = map { it.toEntity() }

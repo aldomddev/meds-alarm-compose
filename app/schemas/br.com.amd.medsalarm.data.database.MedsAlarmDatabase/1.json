@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3c47026fa933df78dac63ab89ebbb69a",
+    "identityHash": "2e64de5528039e082d23d53f545b1cc2",
     "entities": [
       {
-        "tableName": "medsAlarm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication` TEXT NOT NULL, `description` TEXT NOT NULL, `startsOn` TEXT NOT NULL, `endsOn` TEXT, `repeatingInterval` INTEGER NOT NULL, `repeatingIntervalUnit` INTEGER NOT NULL, `seen` INTEGER NOT NULL)",
+        "tableName": "meds_alarm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication` TEXT NOT NULL, `description` TEXT NOT NULL, `starts_on` TEXT NOT NULL, `ends_on` TEXT, `repeating_interval` INTEGER NOT NULL, `repeating_interval_unit` INTEGER NOT NULL, `seen` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -28,25 +28,25 @@
           },
           {
             "fieldPath": "startsOn",
-            "columnName": "startsOn",
+            "columnName": "starts_on",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "endsOn",
-            "columnName": "endsOn",
+            "columnName": "ends_on",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "repeatingInterval",
-            "columnName": "repeatingInterval",
+            "columnName": "repeating_interval",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "repeatingIntervalUnit",
-            "columnName": "repeatingIntervalUnit",
+            "columnName": "repeating_interval_unit",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3c47026fa933df78dac63ab89ebbb69a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2e64de5528039e082d23d53f545b1cc2')"
     ]
   }
 }

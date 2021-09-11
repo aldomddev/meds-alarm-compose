@@ -1,7 +1,5 @@
 package br.com.amd.medsalarm.domain.model
 
-import br.com.amd.medsalarm.data.model.RepeatingInterval
-import br.com.amd.medsalarm.data.model.RepeatingIntervalUnit
 import java.time.LocalDateTime
 
 data class MedsAlarm(

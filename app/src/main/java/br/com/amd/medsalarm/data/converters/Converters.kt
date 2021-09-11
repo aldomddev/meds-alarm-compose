@@ -1,8 +1,8 @@
 package br.com.amd.medsalarm.data.converters
 
 import androidx.room.TypeConverter
-import br.com.amd.medsalarm.data.model.RepeatingInterval
-import br.com.amd.medsalarm.data.model.RepeatingIntervalUnit
+import br.com.amd.medsalarm.domain.model.RepeatingInterval
+import br.com.amd.medsalarm.domain.model.RepeatingIntervalUnit
 import java.time.LocalDateTime
 
 internal object Converters {
