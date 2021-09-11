@@ -11,7 +11,7 @@ object Versions {
     const val androidxComposeUiToolingPreview = compose
     const val androidxCore = "1.6.0"
     const val androidxHiltNavigationCompose = "1.0.0-alpha03"
-    const val androidxLifecycle = "2.3.1"
+    const val androidxLifecycle = "2.4.0-alpha03"
     const val androidxNavigationCompose = "2.4.0-alpha05"
     const val androidxRoom = "2.3.0"
 

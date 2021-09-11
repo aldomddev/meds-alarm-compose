@@ -1,23 +1,15 @@
 package br.com.amd.medsalarm.presentation.screens
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Shape
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,6 +20,7 @@ import br.com.amd.medsalarm.presentation.model.NavigationItem
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
 import kotlinx.coroutines.launch
 
+@ExperimentalMaterialApi
 @Composable
 fun MainScreen(title: String) {
     val fabShape = RoundedCornerShape(50)
@@ -58,11 +51,12 @@ private fun showBottomBar(navController: NavController): Boolean {
     return navBackStackEntry.value?.destination?.route != NavigationItem.MedsDetail.route
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun Navigator(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
         composable(NavigationItem.TodayMeds.route) {
-            TodayMedsScreen()
+            TodayMedsScreen(viewModel = hiltViewModel())
         }
 
         composable(NavigationItem.MyMeds.route) {
