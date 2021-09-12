@@ -6,6 +6,7 @@ object Versions {
     const val androidxActivityCompose = "1.3.0"
     const val androidxAppCompat = "1.3.1"
     const val androidxComposeMaterial = compose
+    const val androidxComposeRuntimeLiveData = "1.0.2"
     const val androidxComposeUi = compose
     const val androidxComposeUiTooling = compose
     const val androidxComposeUiToolingPreview = compose

@@ -18,7 +18,7 @@ internal object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun fromLocalDateTime(localDateTime: LocalDateTime): String {
+    fun fromLocalDateTime(localDateTime: LocalDateTime?): String {
         return try {
             localDateTime.toString()
         } catch (error: Exception) {

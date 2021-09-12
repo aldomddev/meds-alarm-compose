@@ -18,6 +18,7 @@ import androidx.compose.material.*
 import androidx.compose.material.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,40 +33,45 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.amd.medsalarm.R
+import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 
 @Composable
 fun MedicationDetailScreen(
+    viewModel: MedicationDetailViewModel = hiltViewModel(),
     medsAlarmId: Int
 ) {
-    var medication by remember { mutableStateOf(TextFieldValue("")) }
-    var description by remember { mutableStateOf(TextFieldValue("")) }
-    var startsOn by remember { mutableStateOf(TextFieldValue("")) }
-    var endsOn by remember { mutableStateOf(TextFieldValue("")) }
+    val medication by viewModel.medicationText.observeAsState("")
+    val description by viewModel.descriptionText.observeAsState("")
+
+    val startsOn by viewModel.startsOnDateTime.observeAsState("")
+    val endsOn by viewModel.endsOnDateTime.observeAsState("")
+
+    val showStartsOnDateTimeDialog by viewModel.showStartsOnDateTime.observeAsState(false)
+    val showsEndsOnDateTimeDialog by viewModel.showEndsOnDateTime.observeAsState(false)
 
     val focusRequester = remember { FocusRequester() }
-    var showStartsOnDateTimeDialog by remember { mutableStateOf(false) }
     var permanent by remember { mutableStateOf(true) }
-    var showsEndsOnDateTimeDialog by remember { mutableStateOf(false) }
 
     val timePicker = remember { MaterialDialog() }
     timePicker.build(
         buttons = {
             positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
-            negativeButton(stringResource(id = R.string.medication_details_dialog_negative_button))
+            negativeButton(
+                stringResource(id = R.string.medication_details_dialog_negative_button),
+                onClick = { viewModel.onTimeChange(time = null) }
+            )
         }
     ) {
         timepicker(
             title = stringResource(id = R.string.medication_details_dialog_title),
-            onTimeChange = { time ->
-                println("AMD - $time")
-            }
+            onTimeChange = { time -> viewModel.onTimeChange(time) }
         )
     }
 
@@ -73,13 +79,16 @@ fun MedicationDetailScreen(
     datePicker.build(
         buttons = {
             positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
-            negativeButton(stringResource(id = R.string.medication_details_dialog_negative_button))
+            negativeButton(
+                stringResource(id = R.string.medication_details_dialog_negative_button),
+                onClick = { viewModel.onDateChange(date = null) }
+            )
         }
     ) {
         datepicker(
             title = stringResource(id = R.string.medication_details_dialog_title),
             onDateChange = { date ->
-                println("AMD - $date")
+                viewModel.onDateChange(date)
                 timePicker.show()
             }
         )
@@ -87,6 +96,7 @@ fun MedicationDetailScreen(
 
     if (showStartsOnDateTimeDialog || showsEndsOnDateTimeDialog) {
         datePicker.show()
+        viewModel.onDateTimeDialogShow()
     }
 
     var repeatingSelection by remember { mutableStateOf("6") }
@@ -100,7 +110,7 @@ fun MedicationDetailScreen(
         // medication
         TextField(
             value = medication,
-            onValueChange = { medication = it },
+            onValueChange = { viewModel.onMedicationTextChange(text = it) },
             singleLine = true,
             label = { Text(stringResource(id = R.string.medication_details_medication)) },
             placeholder = { Text(text = stringResource(id = R.string.medication_details_medication_placeholder)) },
@@ -120,7 +130,7 @@ fun MedicationDetailScreen(
         // description
         TextField(
             value = description,
-            onValueChange = { description = it },
+            onValueChange = { viewModel.onDescriptionTextChange(text = it) },
             singleLine = true,
             label = { Text(stringResource(id = R.string.medication_details_description)) },
             placeholder = { Text(text = stringResource(id = R.string.medication_details_description_placeholder)) },
@@ -141,7 +151,7 @@ fun MedicationDetailScreen(
         // starts on
         TextField(
             value = startsOn,
-            onValueChange = { startsOn = it },
+            onValueChange = { },
             readOnly = true,
             singleLine = true,
             label = { Text(text = stringResource(id = R.string.medication_details_start_on)) },
@@ -150,7 +160,7 @@ fun MedicationDetailScreen(
                 .fillMaxWidth()
                 .border(1.dp, Color.LightGray, RoundedCornerShape(10))
                 .focusRequester(focusRequester)
-                .onFocusChanged { showStartsOnDateTimeDialog = it.hasFocus }
+                .onFocusChanged { viewModel.onStartsOnFocusChange(focused = it.hasFocus) }
                 .focusTarget()
                 .pointerInput(Unit) { detectTapGestures { focusRequester.requestFocus() } },
             colors = TextFieldDefaults.textFieldColors(
@@ -183,7 +193,7 @@ fun MedicationDetailScreen(
         if (!permanent) {
             TextField(
                 value = endsOn,
-                onValueChange = { endsOn = it },
+                onValueChange = { },
                 readOnly = true,
                 singleLine = true,
                 label = { Text(text = stringResource(id = R.string.medication_details_ends_on)) },
@@ -192,7 +202,7 @@ fun MedicationDetailScreen(
                     .fillMaxWidth()
                     .border(1.dp, Color.LightGray, RoundedCornerShape(10))
                     .focusRequester(focusRequester)
-                    .onFocusChanged { showsEndsOnDateTimeDialog = it.hasFocus }
+                    .onFocusChanged { viewModel.onEndsOnFocusChange(focused = it.hasFocus) }
                     .focusTarget()
                     .pointerInput(Unit) { detectTapGestures { focusRequester.requestFocus() } },
                 colors = TextFieldDefaults.textFieldColors(
@@ -221,7 +231,7 @@ fun MedicationDetailScreen(
             modifier = Modifier
                 .padding(top = 48.dp)
                 .fillMaxWidth(),
-            onClick = { }
+            onClick = { viewModel.onSaveButtonClick() }
         ) {
             Text("Salvar")
         }

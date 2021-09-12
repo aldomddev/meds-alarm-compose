@@ -49,7 +49,6 @@ private fun Navigator(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
         composable(NavigationItem.TodayMeds.route) {
             TodayMedsScreen(
-                viewModel = hiltViewModel(),
                 onItemClick = { itemId ->
                     navController.navigate(NavigationItem.MedsDetail.route.plus("$itemId"))
                 }

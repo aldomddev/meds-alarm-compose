@@ -32,6 +32,7 @@ object Dependencies {
         const val androidxActivityCompose = "androidx.activity:activity-compose:${Versions.androidxActivityCompose}"
         const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
         const val androidxComposeMaterial = "androidx.compose.material:material:${Versions.androidxComposeMaterial}"
+        const val androidxComposeRuntimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.androidxComposeUi}"
         const val androidxComposeUi = "androidx.compose.ui:ui:${Versions.androidxComposeUi}"
         const val androidxComposeUiViewbinding = "androidx.compose.ui:ui-viewbinding:${Versions.androidxComposeUi}"
         const val androidxComposeUiTooling = "androidx.compose.ui:ui-tooling:${Versions.androidxComposeUiTooling}"
@@ -83,6 +84,7 @@ fun DependencyHandler.dependOnCoroutines() {
 fun DependencyHandler.dependOnCompose() {
     implementation(Deps.androidxActivityCompose)
     implementation(Deps.androidxComposeUi)
+    implementation(Deps.androidxComposeRuntimeLiveData)
     implementation(Deps.androidxComposeUiViewbinding)
     implementation(Deps.androidxComposeMaterial)
     implementation(Deps.androidxComposeUiToolingPreview)
