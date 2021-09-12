@@ -9,13 +9,15 @@ import javax.inject.Inject
 class FindNextAlarmsForPeriodUseCase @Inject constructor(
     private val alarmsRepository: MedsAlarmRepository
 ) {
-    suspend operator fun invoke(params: Params): List<MedsAlarm> {
-        return alarmsRepository.findNextAlarmsForPeriod(
-            from = params.from,
-            to = params.to,
-            enabled = params.enabled,
-            seen = params.seen
-        )
+    suspend operator fun invoke(params: Params): Result<List<MedsAlarm>> {
+        return kotlin.runCatching {
+            alarmsRepository.findNextAlarmsForPeriod(
+                from = params.from,
+                to = params.to,
+                enabled = params.enabled,
+                seen = params.seen
+            )
+        }
     }
 
     data class Params(

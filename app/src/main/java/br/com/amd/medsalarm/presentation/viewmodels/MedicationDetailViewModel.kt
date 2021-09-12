@@ -140,7 +140,15 @@ class MedicationDetailViewModel @Inject constructor(
                 startsOn = LocalDateTime.of(startsOnDate!!, startsOnTime!!)
             )
             val params = SaveAlarmUseCase.Params(alarm = alarm)
-            saveAlarmUseCase(params)
+            val result = saveAlarmUseCase(params)
+
+            // TODO: show some message
+            when {
+                result.isSuccess -> {}
+                else -> {
+                    println("${result.exceptionOrNull()}")
+                }
+            }
         }
     }
 

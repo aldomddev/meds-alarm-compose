@@ -7,8 +7,10 @@ import javax.inject.Inject
 class SaveAlarmUseCase @Inject constructor(
     private val alarmsRepository: MedsAlarmRepository
 ) {
-    suspend operator fun invoke(params: Params) {
-        alarmsRepository.saveOrUpdate(alarm = params.alarm)
+    suspend operator fun invoke(params: Params): Result<Unit> {
+        return kotlin.runCatching {
+            alarmsRepository.saveOrUpdate(alarm = params.alarm)
+        }
     }
 
     data class Params(
