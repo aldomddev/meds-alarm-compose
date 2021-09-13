@@ -26,6 +26,10 @@ class MedsAlarmDataRepository @Inject constructor(
         return dao.findNextAlarmsForPeriod(from, to, enabled, seen).toDomain()
     }
 
+    override suspend fun getAlarmById(id: Int): MedsAlarm {
+        return dao.getAlarmById(id).toDomain()
+    }
+
     override suspend fun saveOrUpdate(alarm: MedsAlarm) {
         dao.saveOrUpdate(alarm.toEntity())
     }

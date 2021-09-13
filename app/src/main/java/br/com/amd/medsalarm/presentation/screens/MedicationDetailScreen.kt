@@ -1,27 +1,12 @@
 package br.com.amd.medsalarm.presentation.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.Button
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -57,7 +42,12 @@ fun MedicationDetailScreen(
     val showsEndsOnDateTimeDialog by viewModel.showEndsOnDateTime.observeAsState(false)
 
     val focusRequester = remember { FocusRequester() }
-    var permanent by remember { mutableStateOf(true) }
+    val permanent by viewModel.endsOnDateTimeEnabled.observeAsState(false)
+
+    LaunchedEffect(
+        key1 = "edit_alarm",
+        block = { viewModel.loadAlarmDataForEdition(medsAlarmId) }
+    )
 
     val timePicker = remember { MaterialDialog() }
     timePicker.build(
@@ -181,7 +171,7 @@ fun MedicationDetailScreen(
         ) {
             Checkbox(
                 checked = permanent,
-                onCheckedChange = { permanent = it }
+                onCheckedChange = { }
             )
 
             Spacer(modifier = Modifier.padding(end = 16.dp))

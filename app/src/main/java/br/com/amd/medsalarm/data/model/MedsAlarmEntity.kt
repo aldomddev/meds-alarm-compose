@@ -13,7 +13,7 @@ data class MedsAlarmEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")  val id: Int = 0,
     @NonNull @ColumnInfo(name = "medication") val medication: String,
     @NonNull @ColumnInfo(name = "description") val description: String = "",
-    @NonNull @ColumnInfo(name = "starts_on") val startsOn: LocalDateTime,
+    @ColumnInfo(name = "starts_on") val startsOn: LocalDateTime? = null,
     @ColumnInfo(name = "ends_on") val endsOn: LocalDateTime? = null,
     @ColumnInfo(name = "next") val next: LocalDateTime? = null,
     @NonNull @ColumnInfo(name = "repeating_interval") val repeatingInterval: RepeatingInterval = RepeatingInterval.EIGHT,

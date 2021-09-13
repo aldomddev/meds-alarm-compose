@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8b5f00c83fdf0c9b2ff71e24418ec72c",
+    "identityHash": "0c50dfb22ddc0f7465c6e5f4b172c896",
     "entities": [
       {
         "tableName": "meds_alarm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication` TEXT NOT NULL, `description` TEXT NOT NULL, `starts_on` TEXT NOT NULL, `ends_on` TEXT, `next` TEXT, `repeating_interval` INTEGER NOT NULL, `repeating_interval_unit` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `seen` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication` TEXT NOT NULL, `description` TEXT NOT NULL, `starts_on` TEXT, `ends_on` TEXT, `next` TEXT, `repeating_interval` INTEGER NOT NULL, `repeating_interval_unit` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `seen` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -30,7 +30,7 @@
             "fieldPath": "startsOn",
             "columnName": "starts_on",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "endsOn",
@@ -82,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8b5f00c83fdf0c9b2ff71e24418ec72c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0c50dfb22ddc0f7465c6e5f4b172c896')"
     ]
   }
 }

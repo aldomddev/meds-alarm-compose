@@ -4,11 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.amd.medsalarm.core.extentions.toLiveData
+import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -17,9 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicationDetailViewModel @Inject constructor(
-    private val saveAlarmUseCase: SaveAlarmUseCase
+    private val saveAlarmUseCase: SaveAlarmUseCase,
+    private val getAlarmByIdUseCase: GetAlarmByIdUseCase
 ) : ViewModel() {
 
+    private var alarmInEditionId = 0
     private var medication: String = ""
     private var description: String = ""
     private var startsOnDate: LocalDate? = null
@@ -47,6 +51,9 @@ class MedicationDetailViewModel @Inject constructor(
 
     private val _endsOnDateTime = MutableLiveData<String>()
     val endsOnDateTime = _endsOnDateTime.toLiveData()
+
+    private val _endsOnDateTimeEnabled = MutableLiveData<Boolean>()
+    val endsOnDateTimeEnabled = _endsOnDateTimeEnabled.toLiveData()
 
     fun onMedicationTextChange(text: String) {
         medication = text.trim()
@@ -132,12 +139,30 @@ class MedicationDetailViewModel @Inject constructor(
         }
     }
 
+    private fun getStartsOnDateTime(): LocalDateTime? {
+        return if (startsOnDate != null && startsOnTime != null) {
+            LocalDateTime.of(startsOnDate, startsOnTime)
+        } else {
+            null
+        }
+    }
+
+    private fun getEndsOnDateTime(): LocalDateTime? {
+        return if (endsOnDate != null && endsOnTime != null) {
+            LocalDateTime.of(endsOnDate, endsOnTime)
+        } else {
+            null
+        }
+    }
+
     fun onSaveButtonClick() {
         viewModelScope.launch(Dispatchers.IO) {
             val alarm = MedsAlarm(
+                id = alarmInEditionId,
                 medication = medication,
                 description = description,
-                startsOn = LocalDateTime.of(startsOnDate!!, startsOnTime!!)
+                startsOn = getStartsOnDateTime(),
+                endsOn = getEndsOnDateTime()
             )
             val params = SaveAlarmUseCase.Params(alarm = alarm)
             val result = saveAlarmUseCase(params)
@@ -154,5 +179,44 @@ class MedicationDetailViewModel @Inject constructor(
 
     fun onCancelButtonClick() {
 
+    }
+
+    fun loadAlarmDataForEdition(medsAlarmId: Int) {
+        if (medsAlarmId > 0) {
+            alarmInEditionId = medsAlarmId
+            viewModelScope.launch(Dispatchers.IO) {
+                val params = GetAlarmByIdUseCase.Params(medsAlarmId)
+                getAlarmByIdUseCase(params)
+                    .onSuccess { alarm ->
+                        withContext(Dispatchers.Main) {
+                            loadAlarmDataForEdition(alarm)
+                        }
+                    }
+                    .onFailure {
+                        println("error: $it")
+                    }
+            }
+        } else {
+            alarmInEditionId = 0
+        }
+    }
+
+    private fun loadAlarmDataForEdition(alarm: MedsAlarm) {
+        onMedicationTextChange(text = alarm.medication)
+        onDescriptionTextChange(text = alarm.description)
+
+        isChoosingStartsOnDateTime = true
+        isChoosingEndsOnDateTime = false
+        onDateChange(date = alarm.startsOn?.toLocalDate())
+        onTimeChange(time = alarm.startsOn?.toLocalTime())
+
+        isChoosingStartsOnDateTime = false
+        val endDate = alarm.endsOn?.toLocalDate()
+        val endTime = alarm.endsOn?.toLocalTime()
+        _endsOnDateTimeEnabled.value = endDate == null && endTime == null
+        isChoosingEndsOnDateTime = true
+        onDateChange(date = endDate)
+        onTimeChange(time = endTime)
+        isChoosingEndsOnDateTime = false
     }
 }

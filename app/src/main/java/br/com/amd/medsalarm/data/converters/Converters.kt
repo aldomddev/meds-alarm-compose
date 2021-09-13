@@ -8,21 +8,21 @@ import java.time.LocalDateTime
 internal object Converters {
     @TypeConverter
     @JvmStatic
-    fun toLocalDateTime(dateTime: String): LocalDateTime {
+    fun toLocalDateTime(dateTime: String): LocalDateTime? {
         return try {
             return LocalDateTime.parse(dateTime)
         } catch (error: Exception) {
-            LocalDateTime.now()
+            null
         }
     }
 
     @TypeConverter
     @JvmStatic
-    fun fromLocalDateTime(localDateTime: LocalDateTime?): String {
+    fun fromLocalDateTime(localDateTime: LocalDateTime?): String? {
         return try {
             localDateTime.toString()
         } catch (error: Exception) {
-            LocalDateTime.now().toString()
+            null
         }
     }
 

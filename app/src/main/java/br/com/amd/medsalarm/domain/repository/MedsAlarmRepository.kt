@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 interface MedsAlarmRepository {
     suspend fun observesAll(): Flow<List<MedsAlarm>>
     suspend fun findNextAlarmsForPeriod(from: LocalDateTime, to: LocalDateTime, enabled: Boolean = true, seen: Boolean = true): List<MedsAlarm>
+    suspend fun getAlarmById(id: Int): MedsAlarm
     suspend fun saveOrUpdate(alarm: MedsAlarm)
     suspend fun delete(alarm: MedsAlarm)
 }

@@ -6,7 +6,7 @@ data class MedsAlarm(
     val id: Int = 0,
     val medication: String,
     val description: String = "",
-    val startsOn: LocalDateTime,
+    val startsOn: LocalDateTime? = null,
     val endsOn: LocalDateTime? = null,
     val next: LocalDateTime? = null,
     val repeatingInterval: RepeatingInterval = RepeatingInterval.EIGHT,
