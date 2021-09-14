@@ -1,5 +1,5 @@
 object Versions {
-    const val compose = "1.0.1"
+    const val compose = "1.1.0-alpha03"
 
     const val androidMaterial = "1.4.0"
 
@@ -16,7 +16,7 @@ object Versions {
     const val androidxNavigationCompose = "2.4.0-alpha05"
     const val androidxRoom = "2.3.0"
 
-    const val materialDialogsDateTime = "0.5.1"
+    const val materialDialogsDateTime = "0.6.0"
 
     const val gradleVersionsPlugin = "0.39.0"
     const val hiltAndroid = "2.38.1"

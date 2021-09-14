@@ -7,6 +7,7 @@ import br.com.amd.medsalarm.core.extentions.toLiveData
 import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
+import br.com.amd.medsalarm.domain.model.RepeatingInterval
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class MedicationDetailViewModel @Inject constructor(
     private var startsOnTime: LocalTime? = null
     private var endsOnDate: LocalDate? = null
     private var endsOnTime: LocalTime? = null
+    private var interval = RepeatingInterval.EIGHT
 
     private var isChoosingStartsOnDateTime = false
     private var isChoosingEndsOnDateTime = false
@@ -40,20 +42,23 @@ class MedicationDetailViewModel @Inject constructor(
     private val _descriptionText = MutableLiveData<String>()
     val descriptionText = _descriptionText.toLiveData()
 
-    private val _showStartsOnDateTime = MutableLiveData<Boolean>()
-    val showStartsOnDateTime = _showStartsOnDateTime.toLiveData()
+    private val _showDatePickerDialog = MutableLiveData<Boolean>()
+    val showDatePickerDialog = _showDatePickerDialog.toLiveData()
 
-    private val _startsOnDateTime = MutableLiveData<String>()
-    val startsOnDateTime = _startsOnDateTime.toLiveData()
+    private val _startsOnDateTimeStr = MutableLiveData<String>()
+    val startsOnDateTimeStr = _startsOnDateTimeStr.toLiveData()
 
-    private val _showEndsOnDateTime = MutableLiveData<Boolean>()
-    val showEndsOnDateTime = _showEndsOnDateTime.toLiveData()
+    private val _showTimePickerDialog = MutableLiveData<Boolean>()
+    val showTimePickerDialog = _showTimePickerDialog.toLiveData()
 
-    private val _endsOnDateTime = MutableLiveData<String>()
-    val endsOnDateTime = _endsOnDateTime.toLiveData()
+    private val _endsOnDateTimeStr = MutableLiveData<String>()
+    val endsOnDateTimeStr = _endsOnDateTimeStr.toLiveData()
 
     private val _endsOnDateTimeEnabled = MutableLiveData<Boolean>()
     val endsOnDateTimeEnabled = _endsOnDateTimeEnabled.toLiveData()
+
+    private val _repeatingInterval = MutableLiveData<String>()
+    val repeatingInterval = _repeatingInterval.toLiveData()
 
     fun onMedicationTextChange(text: String) {
         medication = text.trim()
@@ -66,18 +71,23 @@ class MedicationDetailViewModel @Inject constructor(
     }
 
     fun onStartsOnFocusChange(focused: Boolean) {
+        resetEndsDateTimeControl()
         isChoosingStartsOnDateTime = focused
-        _showStartsOnDateTime.value = focused
+        _showDatePickerDialog.value = focused
+    }
+
+    private fun resetStartsOnDateTimeControl() {
+        isChoosingStartsOnDateTime = false
     }
 
     fun onEndsOnFocusChange(focused: Boolean) {
+        resetStartsOnDateTimeControl()
         isChoosingEndsOnDateTime = focused
-        _showEndsOnDateTime.value = focused
+        _showDatePickerDialog.value = focused
     }
 
-    fun onDateTimeDialogShow() {
-        _showStartsOnDateTime.value = false
-        _showEndsOnDateTime.value = false
+    private fun resetEndsDateTimeControl() {
+        isChoosingEndsOnDateTime = false
     }
 
     fun onDateChange(date: LocalDate?) {
@@ -85,11 +95,15 @@ class MedicationDetailViewModel @Inject constructor(
             isChoosingStartsOnDateTime -> startsOnDate = date
             isChoosingEndsOnDateTime -> endsOnDate = date
         }
+        _showDatePickerDialog.value = false
+        _showTimePickerDialog.value = date != null
 
         println("AMD - onDateChange: $date, start=$isChoosingStartsOnDateTime, end=$isChoosingEndsOnDateTime")
     }
 
     fun onTimeChange(time: LocalTime?) {
+        _showTimePickerDialog.value = false
+
         when {
             isChoosingStartsOnDateTime -> {
                 startsOnTime = time
@@ -109,6 +123,9 @@ class MedicationDetailViewModel @Inject constructor(
             isChoosingStartsOnDateTime -> formatAndShowStartsOnDateTime()
             isChoosingEndsOnDateTime -> formatAndShowEndsOnDateTime()
         }
+
+        resetStartsOnDateTimeControl()
+        resetEndsDateTimeControl()
     }
 
     private fun formatAndShowStartsOnDateTime() {
@@ -119,9 +136,9 @@ class MedicationDetailViewModel @Inject constructor(
             val localDateStr = startDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
             val localTimeStr = startTime.format(DateTimeFormatter.ISO_LOCAL_TIME)
 
-            _startsOnDateTime.value = "$localDateStr - $localTimeStr"
+            _startsOnDateTimeStr.value = "$localDateStr - $localTimeStr"
         } else {
-            _startsOnDateTime.value = ""
+            _startsOnDateTimeStr.value = ""
         }
     }
 
@@ -133,9 +150,9 @@ class MedicationDetailViewModel @Inject constructor(
             val localDateStr = endDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
             val localTimeStr = endTime.format(DateTimeFormatter.ISO_LOCAL_TIME)
 
-            _endsOnDateTime.value = "$localDateStr - $localTimeStr"
+            _endsOnDateTimeStr.value = "$localDateStr - $localTimeStr"
         } else {
-            _endsOnDateTime.value = ""
+            _endsOnDateTimeStr.value = ""
         }
     }
 
@@ -152,6 +169,15 @@ class MedicationDetailViewModel @Inject constructor(
             LocalDateTime.of(endsOnDate, endsOnTime)
         } else {
             null
+        }
+    }
+
+    fun onRepeatingIntervalChanged(value: String) {
+        RepeatingInterval.values().forEach { itv ->
+            if (itv.interval.toString() == value) {
+                interval = itv
+                _repeatingInterval.value = itv.interval.toString()
+            }
         }
     }
 
@@ -178,7 +204,7 @@ class MedicationDetailViewModel @Inject constructor(
     }
 
     fun onCancelButtonClick() {
-
+        // TODO
     }
 
     fun loadAlarmDataForEdition(medsAlarmId: Int) {
@@ -198,6 +224,7 @@ class MedicationDetailViewModel @Inject constructor(
             }
         } else {
             alarmInEditionId = 0
+            loadAlarmDataForEdition(alarm = MedsAlarm(medication = ""))
         }
     }
 
@@ -218,5 +245,7 @@ class MedicationDetailViewModel @Inject constructor(
         onDateChange(date = endDate)
         onTimeChange(time = endTime)
         isChoosingEndsOnDateTime = false
+
+        _repeatingInterval.value = alarm.repeatingInterval.interval.toString()
     }
 }

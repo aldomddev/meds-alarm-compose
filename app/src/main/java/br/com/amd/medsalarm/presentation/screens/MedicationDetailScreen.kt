@@ -22,10 +22,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.amd.medsalarm.R
+import br.com.amd.medsalarm.domain.model.RepeatingInterval
 import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
 @Composable
 fun MedicationDetailScreen(
@@ -35,62 +37,22 @@ fun MedicationDetailScreen(
     val medication by viewModel.medicationText.observeAsState("")
     val description by viewModel.descriptionText.observeAsState("")
 
-    val startsOn by viewModel.startsOnDateTime.observeAsState("")
-    val endsOn by viewModel.endsOnDateTime.observeAsState("")
-
-    val showStartsOnDateTimeDialog by viewModel.showStartsOnDateTime.observeAsState(false)
-    val showsEndsOnDateTimeDialog by viewModel.showEndsOnDateTime.observeAsState(false)
+    val startsOn by viewModel.startsOnDateTimeStr.observeAsState("")
+    val endsOn by viewModel.endsOnDateTimeStr.observeAsState("")
 
     val focusRequester = remember { FocusRequester() }
     val permanent by viewModel.endsOnDateTimeEnabled.observeAsState(false)
+
+    val repeatingSelection by viewModel.repeatingInterval.observeAsState("")
+    val scrollState = rememberScrollState()
+
+    DatePickerDialog(viewModel = viewModel)
+    TimePickerDialog(viewModel = viewModel)
 
     LaunchedEffect(
         key1 = "edit_alarm",
         block = { viewModel.loadAlarmDataForEdition(medsAlarmId) }
     )
-
-    val timePicker = remember { MaterialDialog() }
-    timePicker.build(
-        buttons = {
-            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
-            negativeButton(
-                stringResource(id = R.string.medication_details_dialog_negative_button),
-                onClick = { viewModel.onTimeChange(time = null) }
-            )
-        }
-    ) {
-        timepicker(
-            title = stringResource(id = R.string.medication_details_dialog_title),
-            onTimeChange = { time -> viewModel.onTimeChange(time) }
-        )
-    }
-
-    val datePicker = remember { MaterialDialog() }
-    datePicker.build(
-        buttons = {
-            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
-            negativeButton(
-                stringResource(id = R.string.medication_details_dialog_negative_button),
-                onClick = { viewModel.onDateChange(date = null) }
-            )
-        }
-    ) {
-        datepicker(
-            title = stringResource(id = R.string.medication_details_dialog_title),
-            onDateChange = { date ->
-                viewModel.onDateChange(date)
-                timePicker.show()
-            }
-        )
-    }
-
-    if (showStartsOnDateTimeDialog || showsEndsOnDateTimeDialog) {
-        datePicker.show()
-        viewModel.onDateTimeDialogShow()
-    }
-
-    var repeatingSelection by remember { mutableStateOf("6") }
-    val scrollState = rememberScrollState()
 
     Column(modifier = Modifier
         .padding(top = 16.dp, bottom = 80.dp, start = 16.dp, end = 16.dp)
@@ -207,12 +169,18 @@ fun MedicationDetailScreen(
         }
 
         RepeatingIntervalRadioGroup(
-            items = listOf("4", "6", "8", "12", "Outro"),
+            items = listOf(
+                RepeatingInterval.FOUR.interval.toString(),
+                RepeatingInterval.SIX.interval.toString(),
+                RepeatingInterval.EIGHT.interval.toString(),
+                RepeatingInterval.TWELVE.interval.toString(),
+                RepeatingInterval.CUSTOM.interval.toString(),
+            ),
             selectedItem = repeatingSelection,
-            onSelectionChanged = { repeatingSelection = it }
+            onSelectionChanged = { viewModel.onRepeatingIntervalChanged(it) }
         )
 
-        if (repeatingSelection == "Outro") {
+        if (repeatingSelection == RepeatingInterval.CUSTOM.interval.toString()) {
             CustomRepeatingInterval(isVisible = true)
         }
 
@@ -338,6 +306,88 @@ private fun CustomRepeatingInterval(
 //                )
             //}
         }
+    }
+}
+
+@Composable
+private fun DatePickerDialog(
+    viewModel: MedicationDetailViewModel
+) {
+    val showDatePickerDialog by viewModel.showDatePickerDialog.observeAsState(false)
+    
+    val dialogState = rememberMaterialDialogState()
+    MaterialDialog(
+        dialogState = dialogState,
+        onCloseRequest = {},
+        buttons = {
+            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
+            negativeButton(
+                stringResource(id = R.string.medication_details_dialog_negative_button),
+                onClick = { viewModel.onDateChange(date = null) }
+            )
+        }
+    ) {
+        datepicker(
+            title = stringResource(id = R.string.medication_details_dialog_title),
+            onDateChange = { date -> viewModel.onDateChange(date = date) }
+        )
+    }
+
+    if (showDatePickerDialog) {
+        LaunchedEffect(
+            key1 = "show_date_picker_dialog",
+            block = {
+                dialogState.show()
+            }
+        )
+    } else {
+        LaunchedEffect(
+            key1 = "hide_date_picker_dialog",
+            block = {
+                dialogState.hide()
+            }
+        )
+    }
+}
+
+@Composable
+private fun TimePickerDialog(
+    viewModel: MedicationDetailViewModel
+) {
+    val showTimePickerDialog by viewModel.showTimePickerDialog.observeAsState(false)
+
+    val dialogState = rememberMaterialDialogState()
+    MaterialDialog(
+        dialogState = dialogState,
+        onCloseRequest = {},
+        buttons = {
+            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
+            negativeButton(
+                stringResource(id = R.string.medication_details_dialog_negative_button),
+                onClick = { viewModel.onTimeChange(time = null) }
+            )
+        }
+    ) {
+        timepicker(
+            title = stringResource(id = R.string.medication_details_dialog_title),
+            onTimeChange = { time -> viewModel.onTimeChange(time = time) }
+        )
+    }
+
+    if (showTimePickerDialog) {
+        LaunchedEffect(
+            key1 = "show_time_picker_dialog",
+            block = {
+                dialogState.show()
+            }
+        )
+    } else {
+        LaunchedEffect(
+            key1 = "hide_time_picker_dialog",
+            block = {
+                dialogState.hide()
+            }
+        )
     }
 }
 

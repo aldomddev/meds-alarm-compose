@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
 
     defaultConfig {
         applicationId = "br.com.amd.medsalarm"
         minSdk = 23
-        targetSdk = 30
+        targetSdk = compileSdk
         versionCode = 1
         versionName = "1.0"
 
