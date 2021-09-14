@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.amd.medsalarm.R
-import br.com.amd.medsalarm.domain.model.RepeatingInterval
+import br.com.amd.medsalarm.presentation.model.RepeatingIntervalVO
 import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -43,7 +43,8 @@ fun MedicationDetailScreen(
     val focusRequester = remember { FocusRequester() }
     val permanent by viewModel.endsOnDateTimeEnabled.observeAsState(false)
 
-    val repeatingSelection by viewModel.repeatingInterval.observeAsState("")
+    val repeatingSelection by viewModel.repeatingInterval.observeAsState(RepeatingIntervalVO.EIGHT)
+
     val scrollState = rememberScrollState()
 
     DatePickerDialog(viewModel = viewModel)
@@ -170,19 +171,17 @@ fun MedicationDetailScreen(
 
         RepeatingIntervalRadioGroup(
             items = listOf(
-                RepeatingInterval.FOUR.interval.toString(),
-                RepeatingInterval.SIX.interval.toString(),
-                RepeatingInterval.EIGHT.interval.toString(),
-                RepeatingInterval.TWELVE.interval.toString(),
-                RepeatingInterval.CUSTOM.interval.toString(),
+                RepeatingIntervalVO.FOUR,
+                RepeatingIntervalVO.SIX,
+                RepeatingIntervalVO.EIGHT,
+                RepeatingIntervalVO.TWELVE,
+                RepeatingIntervalVO.CUSTOM,
             ),
             selectedItem = repeatingSelection,
-            onSelectionChanged = { viewModel.onRepeatingIntervalChanged(it) }
+            onSelectionChanged = { selection -> viewModel.onRepeatingIntervalChanged(selection) }
         )
 
-        if (repeatingSelection == RepeatingInterval.CUSTOM.interval.toString()) {
-            CustomRepeatingInterval(isVisible = true)
-        }
+        CustomRepeatingInterval(isVisible = repeatingSelection == RepeatingIntervalVO.CUSTOM)
 
         // save
         Button(
@@ -208,9 +207,9 @@ fun MedicationDetailScreen(
 
 @Composable
 private fun RepeatingIntervalRadioGroup(
-    items: List<String>,
-    selectedItem: String,
-    onSelectionChanged: (String) -> Unit
+    items: List<RepeatingIntervalVO>,
+    selectedItem: RepeatingIntervalVO,
+    onSelectionChanged: (RepeatingIntervalVO) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -234,7 +233,7 @@ private fun RepeatingIntervalRadioGroup(
 
                 Spacer(modifier = Modifier.padding(2.dp))
 
-                Text(text = item)
+                Text(text = stringResource(id = item.intervalRes))
 
                 Spacer(modifier = Modifier.padding(8.dp))
             }

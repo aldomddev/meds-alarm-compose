@@ -7,7 +7,9 @@ import br.com.amd.medsalarm.core.extentions.toLiveData
 import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
-import br.com.amd.medsalarm.domain.model.RepeatingInterval
+import br.com.amd.medsalarm.presentation.mappers.toDomain
+import br.com.amd.medsalarm.presentation.mappers.toPresenter
+import br.com.amd.medsalarm.presentation.model.RepeatingIntervalVO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +33,7 @@ class MedicationDetailViewModel @Inject constructor(
     private var startsOnTime: LocalTime? = null
     private var endsOnDate: LocalDate? = null
     private var endsOnTime: LocalTime? = null
-    private var interval = RepeatingInterval.EIGHT
+    private var interval = RepeatingIntervalVO.EIGHT
 
     private var isChoosingStartsOnDateTime = false
     private var isChoosingEndsOnDateTime = false
@@ -57,7 +59,7 @@ class MedicationDetailViewModel @Inject constructor(
     private val _endsOnDateTimeEnabled = MutableLiveData<Boolean>()
     val endsOnDateTimeEnabled = _endsOnDateTimeEnabled.toLiveData()
 
-    private val _repeatingInterval = MutableLiveData<String>()
+    private val _repeatingInterval = MutableLiveData<RepeatingIntervalVO>()
     val repeatingInterval = _repeatingInterval.toLiveData()
 
     fun onMedicationTextChange(text: String) {
@@ -172,13 +174,9 @@ class MedicationDetailViewModel @Inject constructor(
         }
     }
 
-    fun onRepeatingIntervalChanged(value: String) {
-        RepeatingInterval.values().forEach { itv ->
-            if (itv.interval.toString() == value) {
-                interval = itv
-                _repeatingInterval.value = itv.interval.toString()
-            }
-        }
+    fun onRepeatingIntervalChanged(value: RepeatingIntervalVO) {
+        interval = value
+        _repeatingInterval.value = value
     }
 
     fun onSaveButtonClick() {
@@ -188,7 +186,8 @@ class MedicationDetailViewModel @Inject constructor(
                 medication = medication,
                 description = description,
                 startsOn = getStartsOnDateTime(),
-                endsOn = getEndsOnDateTime()
+                endsOn = getEndsOnDateTime(),
+                repeatingInterval = interval.toDomain()
             )
             val params = SaveAlarmUseCase.Params(alarm = alarm)
             val result = saveAlarmUseCase(params)
@@ -246,6 +245,6 @@ class MedicationDetailViewModel @Inject constructor(
         onTimeChange(time = endTime)
         isChoosingEndsOnDateTime = false
 
-        _repeatingInterval.value = alarm.repeatingInterval.interval.toString()
+        _repeatingInterval.value = alarm.repeatingInterval.toPresenter()
     }
 }
