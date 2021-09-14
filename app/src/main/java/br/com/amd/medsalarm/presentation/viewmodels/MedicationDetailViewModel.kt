@@ -63,12 +63,12 @@ class MedicationDetailViewModel @Inject constructor(
     val repeatingInterval = _repeatingInterval.toLiveData()
 
     fun onMedicationTextChange(text: String) {
-        medication = text.trim()
+        medication = text
         _medicationText.value = medication
     }
 
     fun onDescriptionTextChange(text: String) {
-        description = text.trim()
+        description = text
         _descriptionText.value = description
     }
 
@@ -183,8 +183,8 @@ class MedicationDetailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val alarm = MedsAlarm(
                 id = alarmInEditionId,
-                medication = medication,
-                description = description,
+                medication = medication.trim(),
+                description = description.trim(),
                 startsOn = getStartsOnDateTime(),
                 endsOn = getEndsOnDateTime(),
                 repeatingInterval = interval.toDomain()
