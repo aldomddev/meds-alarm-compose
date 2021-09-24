@@ -21,6 +21,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import br.com.amd.medsalarm.presentation.mappers.toDomain
 import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
+import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import br.com.amd.medsalarm.presentation.model.NavigationItem
 import br.com.amd.medsalarm.presentation.viewmodels.TodayMedsViewModel
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
@@ -62,7 +63,7 @@ private fun Navigator(navController: NavHostController) {
             val lifecycleOwner = LocalLifecycleOwner.current
             val alarmsLifecycleAware = remember(todayMedsViewModel.viewState, lifecycleOwner) {
                 todayMedsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            }.collectAsState(initial = TodayMedsViewModel.ViewState.Loading)
+            }.collectAsState(initial = MedsAlarmListState.Loading)
 
             TodayMedsScreen(
                 viewState = alarmsLifecycleAware.value,

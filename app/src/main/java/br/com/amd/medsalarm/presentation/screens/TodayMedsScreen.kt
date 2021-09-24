@@ -22,26 +22,26 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import br.com.amd.medsalarm.R
 import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
+import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
-import br.com.amd.medsalarm.presentation.viewmodels.TodayMedsViewModel
 import java.time.LocalDateTime
 
 @ExperimentalMaterialApi
 @Composable
 fun TodayMedsScreen(
-    viewState: TodayMedsViewModel.ViewState,
+    viewState: MedsAlarmListState,
     onItemClick: (MedsAlarmVO) -> Unit
 ) {
     when(viewState) {
-        TodayMedsViewModel.ViewState.Empty -> Text("Empty")
-        TodayMedsViewModel.ViewState.Error -> {}
-        is TodayMedsViewModel.ViewState.Loaded -> {
+        MedsAlarmListState.Empty -> Text("Empty")
+        MedsAlarmListState.Error -> {}
+        is MedsAlarmListState.Loaded -> {
             MedsAlarmList(
                 alarms = viewState.data,
                 onItemClick = onItemClick
             )
         }
-        TodayMedsViewModel.ViewState.Loading -> {}
+        MedsAlarmListState.Loading -> {}
     }
 }
 

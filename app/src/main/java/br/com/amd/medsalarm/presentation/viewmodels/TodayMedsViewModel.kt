@@ -6,10 +6,9 @@ import br.com.amd.medsalarm.domain.interactors.DeleteAlarmUseCase
 import br.com.amd.medsalarm.domain.interactors.GetAllAlarmsUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
 import br.com.amd.medsalarm.presentation.mappers.toPresenter
-import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
+import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -25,18 +24,18 @@ class TodayMedsViewModel @Inject constructor (
     private val deleteAlarmUseCase: DeleteAlarmUseCase
 ) : ViewModel() {
 
-    val viewState: Flow<ViewState> = flow {
+    val viewState: Flow<MedsAlarmListState> = flow {
         getAllAlarmsUseCase()
             .catch { exception ->
                 println(exception)
-                emit(ViewState.Error)
+                emit(MedsAlarmListState.Error)
             }
             .collect { alarms ->
                 if (alarms.isEmpty()) {
                     //emit(ViewState.Empty)
-                    emit(ViewState.Loaded(dummyAlarms().toPresenter()))
+                    emit(MedsAlarmListState.Loaded(dummyAlarms().toPresenter()))
                 } else {
-                    emit(ViewState.Loaded(alarms.toPresenter()))
+                    emit(MedsAlarmListState.Loaded(alarms.toPresenter()))
                 }
             }
     }
@@ -65,12 +64,5 @@ class TodayMedsViewModel @Inject constructor (
                 startsOn = LocalDateTime.of(2021, Month.AUGUST, 20, 21, 45)
             )
         )
-    }
-
-    sealed class ViewState {
-        object Empty: ViewState()
-        object Loading: ViewState()
-        data class Loaded(val data: List<MedsAlarmVO>): ViewState()
-        object Error: ViewState()
     }
 }
