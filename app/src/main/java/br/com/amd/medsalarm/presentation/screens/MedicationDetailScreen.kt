@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.amd.medsalarm.R
@@ -31,8 +30,7 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
 @Composable
 fun MedicationDetailScreen(
-    viewModel: MedicationDetailViewModel = hiltViewModel(),
-    medsAlarmId: Int
+    viewModel: MedicationDetailViewModel = hiltViewModel()
 ) {
     val medication by viewModel.medicationText.observeAsState("")
     val description by viewModel.descriptionText.observeAsState("")
@@ -49,11 +47,6 @@ fun MedicationDetailScreen(
 
     DatePickerDialog(viewModel = viewModel)
     TimePickerDialog(viewModel = viewModel)
-
-    LaunchedEffect(
-        key1 = "edit_alarm",
-        block = { viewModel.loadAlarmDataForEdition(medsAlarmId) }
-    )
 
     Column(modifier = Modifier
         .padding(top = 16.dp, bottom = 80.dp, start = 16.dp, end = 16.dp)
@@ -390,8 +383,8 @@ private fun TimePickerDialog(
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun MedicationDetailScreenPreview() {
-    MedicationDetailScreen(medsAlarmId = 0)
-}
+//@Composable
+//@Preview(showBackground = true)
+//fun MedicationDetailScreenPreview() {
+//    MedicationDetailScreen()
+//}

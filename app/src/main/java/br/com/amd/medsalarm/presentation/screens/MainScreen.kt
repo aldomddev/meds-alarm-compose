@@ -91,10 +91,8 @@ private fun Navigator(navController: NavHostController) {
                     defaultValue = 0
                 }
             )
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id") ?: 0
-            println("AMD - id=$id")
-            MedicationDetailScreen(medsAlarmId = id)
+        ) {
+            MedicationDetailScreen()
         }
     }
 }

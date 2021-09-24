@@ -1,6 +1,7 @@
 package br.com.amd.medsalarm.presentation.viewmodels
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.amd.medsalarm.core.extentions.toLiveData
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicationDetailViewModel @Inject constructor(
     private val saveAlarmUseCase: SaveAlarmUseCase,
-    private val getAlarmByIdUseCase: GetAlarmByIdUseCase
+    private val getAlarmByIdUseCase: GetAlarmByIdUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private var alarmInEditionId = 0
@@ -61,6 +63,10 @@ class MedicationDetailViewModel @Inject constructor(
 
     private val _repeatingInterval = MutableLiveData<RepeatingIntervalVO>()
     val repeatingInterval = _repeatingInterval.toLiveData()
+
+    init {
+        loadAlarmDataForEdition(medsAlarmId = savedStateHandle.get<Int>("id") ?: 0)
+    }
 
     fun onMedicationTextChange(text: String) {
         medication = text
@@ -206,7 +212,7 @@ class MedicationDetailViewModel @Inject constructor(
         // TODO
     }
 
-    fun loadAlarmDataForEdition(medsAlarmId: Int) {
+    private fun loadAlarmDataForEdition(medsAlarmId: Int) {
         if (medsAlarmId > 0) {
             alarmInEditionId = medsAlarmId
             viewModelScope.launch(Dispatchers.IO) {
