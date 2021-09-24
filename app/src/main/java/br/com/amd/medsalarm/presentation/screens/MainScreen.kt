@@ -7,14 +7,22 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import br.com.amd.medsalarm.presentation.mappers.toDomain
+import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
 import br.com.amd.medsalarm.presentation.model.NavigationItem
+import br.com.amd.medsalarm.presentation.viewmodels.TodayMedsViewModel
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
 import kotlinx.coroutines.launch
 
@@ -47,10 +55,27 @@ fun MainScreen(title: String) {
 @Composable
 private fun Navigator(navController: NavHostController) {
     NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
+
         composable(NavigationItem.TodayMeds.route) {
+            val todayMedsViewModel: TodayMedsViewModel = hiltViewModel()
+
+            val lifecycleOwner = LocalLifecycleOwner.current
+            val alarmsLifecycleAware = remember(todayMedsViewModel.viewState, lifecycleOwner) {
+                todayMedsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            }.collectAsState(initial = TodayMedsViewModel.ViewState.Loading)
+
             TodayMedsScreen(
-                onItemClick = { itemId ->
-                    navController.navigate(NavigationItem.MedsDetail.route.plus("$itemId"))
+                viewState = alarmsLifecycleAware.value,
+                onItemClick = { item ->
+                    when(item.action) {
+                       MedsAlarmActionVO.EDIT -> {
+                           navController.navigate(NavigationItem.MedsDetail.route.plus("${item.id}"))
+                       }
+
+                       MedsAlarmActionVO.DELETE -> {
+                           todayMedsViewModel.removeAlarm(item.toDomain())
+                       }
+                    }
                 }
             )
         }

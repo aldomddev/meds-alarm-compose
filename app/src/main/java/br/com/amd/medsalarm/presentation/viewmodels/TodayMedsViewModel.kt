@@ -1,22 +1,28 @@
 package br.com.amd.medsalarm.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import br.com.amd.medsalarm.domain.interactors.DeleteAlarmUseCase
 import br.com.amd.medsalarm.domain.interactors.GetAllAlarmsUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
 import br.com.amd.medsalarm.presentation.mappers.toPresenter
 import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.Month
 import javax.inject.Inject
 
 @HiltViewModel
 class TodayMedsViewModel @Inject constructor (
-    private val getAllAlarmsUseCase: GetAllAlarmsUseCase
+    private val getAllAlarmsUseCase: GetAllAlarmsUseCase,
+    private val deleteAlarmUseCase: DeleteAlarmUseCase
 ) : ViewModel() {
 
     val viewState: Flow<ViewState> = flow {
@@ -33,6 +39,12 @@ class TodayMedsViewModel @Inject constructor (
                     emit(ViewState.Loaded(alarms.toPresenter()))
                 }
             }
+    }
+
+    fun removeAlarm(alarm: MedsAlarm) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteAlarmUseCase(DeleteAlarmUseCase.Params(alarm))
+        }
     }
 
     private fun dummyAlarms(): List<MedsAlarm> {

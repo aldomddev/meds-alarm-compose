@@ -1,4 +1,4 @@
-object Versions {
+internal object Versions {
     const val compose = "1.1.0-alpha03"
 
     const val androidMaterial = "1.4.0"
