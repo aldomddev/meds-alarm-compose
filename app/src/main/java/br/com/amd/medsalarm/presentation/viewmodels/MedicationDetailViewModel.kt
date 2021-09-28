@@ -1,10 +1,10 @@
 package br.com.amd.medsalarm.presentation.viewmodels
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.amd.medsalarm.core.extentions.toLiveData
+import br.com.amd.medsalarm.core.extentions.toState
 import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
@@ -40,29 +40,29 @@ class MedicationDetailViewModel @Inject constructor(
     private var isChoosingStartsOnDateTime = false
     private var isChoosingEndsOnDateTime = false
 
-    private val _medicationText = MutableLiveData<String>()
-    val medicationText = _medicationText.toLiveData()
+    private val _medicationText = mutableStateOf(value = "")
+    val medicationText = _medicationText.toState()
 
-    private val _descriptionText = MutableLiveData<String>()
-    val descriptionText = _descriptionText.toLiveData()
+    private val _descriptionText = mutableStateOf(value = "")
+    val descriptionText = _descriptionText.toState()
 
-    private val _showDatePickerDialog = MutableLiveData<Boolean>()
-    val showDatePickerDialog = _showDatePickerDialog.toLiveData()
+    private val _showDatePickerDialog = mutableStateOf(value = false)
+    val showDatePickerDialog = _showDatePickerDialog.toState()
 
-    private val _startsOnDateTimeStr = MutableLiveData<String>()
-    val startsOnDateTimeStr = _startsOnDateTimeStr.toLiveData()
+    private val _startsOnDateTimeStr = mutableStateOf(value = "")
+    val startsOnDateTimeStr = _startsOnDateTimeStr.toState()
 
-    private val _showTimePickerDialog = MutableLiveData<Boolean>()
-    val showTimePickerDialog = _showTimePickerDialog.toLiveData()
+    private val _showTimePickerDialog = mutableStateOf(value = false)
+    val showTimePickerDialog = _showTimePickerDialog.toState()
 
-    private val _endsOnDateTimeStr = MutableLiveData<String>()
-    val endsOnDateTimeStr = _endsOnDateTimeStr.toLiveData()
+    private val _endsOnDateTimeStr = mutableStateOf(value = "")
+    val endsOnDateTimeStr = _endsOnDateTimeStr.toState()
 
-    private val _endsOnDateTimeEnabled = MutableLiveData<Boolean>()
-    val endsOnDateTimeEnabled = _endsOnDateTimeEnabled.toLiveData()
+    private val _endsOnDateTimeEnabled = mutableStateOf(value = false)
+    val endsOnDateTimeEnabled = _endsOnDateTimeEnabled.toState()
 
-    private val _repeatingInterval = MutableLiveData<RepeatingIntervalVO>()
-    val repeatingInterval = _repeatingInterval.toLiveData()
+    private val _repeatingInterval = mutableStateOf(value = RepeatingIntervalVO.EIGHT)
+    val repeatingInterval = _repeatingInterval.toState()
 
     init {
         loadAlarmDataForEdition(medsAlarmId = savedStateHandle.get<Int>("id") ?: 0)
@@ -200,7 +200,8 @@ class MedicationDetailViewModel @Inject constructor(
 
             // TODO: show some message
             when {
-                result.isSuccess -> {}
+                result.isSuccess -> {
+                }
                 else -> {
                     println("${result.exceptionOrNull()}")
                 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -32,16 +31,16 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 fun MedicationDetailScreen(
     viewModel: MedicationDetailViewModel = hiltViewModel()
 ) {
-    val medication by viewModel.medicationText.observeAsState("")
-    val description by viewModel.descriptionText.observeAsState("")
+    val medication by viewModel.medicationText
+    val description by viewModel.descriptionText
 
-    val startsOn by viewModel.startsOnDateTimeStr.observeAsState("")
-    val endsOn by viewModel.endsOnDateTimeStr.observeAsState("")
+    val startsOn by viewModel.startsOnDateTimeStr
+    val endsOn by viewModel.endsOnDateTimeStr
 
     val focusRequester = remember { FocusRequester() }
-    val permanent by viewModel.endsOnDateTimeEnabled.observeAsState(false)
+    val permanent by viewModel.endsOnDateTimeEnabled
 
-    val repeatingSelection by viewModel.repeatingInterval.observeAsState(RepeatingIntervalVO.EIGHT)
+    val repeatingSelection by viewModel.repeatingInterval
 
     val scrollState = rememberScrollState()
 
@@ -305,7 +304,7 @@ private fun CustomRepeatingInterval(
 private fun DatePickerDialog(
     viewModel: MedicationDetailViewModel
 ) {
-    val showDatePickerDialog by viewModel.showDatePickerDialog.observeAsState(false)
+    val showDatePickerDialog by viewModel.showDatePickerDialog
     
     val dialogState = rememberMaterialDialogState()
     MaterialDialog(
@@ -346,7 +345,7 @@ private fun DatePickerDialog(
 private fun TimePickerDialog(
     viewModel: MedicationDetailViewModel
 ) {
-    val showTimePickerDialog by viewModel.showTimePickerDialog.observeAsState(false)
+    val showTimePickerDialog by viewModel.showTimePickerDialog
 
     val dialogState = rememberMaterialDialogState()
     MaterialDialog(
