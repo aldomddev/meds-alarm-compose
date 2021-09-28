@@ -65,7 +65,7 @@ private fun Navigator(navController: NavHostController) {
                 todayMedsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             }.collectAsState(initial = MedsAlarmListState.Loading)
 
-            TodayMedsScreen(
+            MedsListScreen(
                 viewState = alarmsLifecycleAware.value,
                 onItemClick = { item ->
                     when(item.action) {
@@ -82,7 +82,27 @@ private fun Navigator(navController: NavHostController) {
         }
 
         composable(NavigationItem.MyMeds.route) {
-            MedicationsScreen()
+            val todayMedsViewModel: TodayMedsViewModel = hiltViewModel()
+
+            val lifecycleOwner = LocalLifecycleOwner.current
+            val alarmsLifecycleAware = remember(todayMedsViewModel.viewState, lifecycleOwner) {
+                todayMedsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            }.collectAsState(initial = MedsAlarmListState.Loading)
+
+            MedsListScreen(
+                viewState = alarmsLifecycleAware.value,
+                onItemClick = { item ->
+                    when(item.action) {
+                        MedsAlarmActionVO.EDIT -> {
+                            navController.navigate(NavigationItem.MedsDetail.route.plus("${item.id}"))
+                        }
+
+                        MedsAlarmActionVO.DELETE -> {
+                            todayMedsViewModel.removeAlarm(item.toDomain())
+                        }
+                    }
+                }
+            )
         }
 
         composable(

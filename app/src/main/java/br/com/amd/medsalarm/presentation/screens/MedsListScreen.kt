@@ -28,7 +28,7 @@ import java.time.LocalDateTime
 
 @ExperimentalMaterialApi
 @Composable
-fun TodayMedsScreen(
+fun MedsListScreen(
     viewState: MedsAlarmListState,
     onItemClick: (MedsAlarmVO) -> Unit
 ) {
