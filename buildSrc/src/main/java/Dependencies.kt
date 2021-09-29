@@ -51,7 +51,10 @@ object Dependencies {
 
         const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hiltAndroid}"
         const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hiltAndroid}"
+        const val hiltAndroidWorkManager = "androidx.hilt:hilt-work:${Versions.hiltWorkManager}"
         const val jetBrainsCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.jetBrainsCoroutines}"
+
+        const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManager}"
 
         // Tests
         const val androidxJunit = "androidx.test.ext:junit:${Versions.androidxJunit}"
@@ -95,6 +98,7 @@ fun DependencyHandler.dependOnCompose() {
 
 fun DependencyHandler.dependOnHilt() {
     implementation(Deps.hiltAndroid)
+    implementation(Deps.hiltAndroidWorkManager)
     kapt(Deps.hiltAndroidCompiler)
 }
 

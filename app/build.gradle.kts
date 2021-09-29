@@ -63,6 +63,7 @@ dependencies {
     implementation(Deps.androidMaterial)
     implementation(Deps.androidxAppCompat)
     implementation(Deps.androidxCore)
+    implementation(Deps.workManager)
     // for java.time support
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     // date time non-official dialogs

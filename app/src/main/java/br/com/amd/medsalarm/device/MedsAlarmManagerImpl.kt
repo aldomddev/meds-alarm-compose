@@ -29,7 +29,7 @@ class MedsAlarmManagerImpl @Inject constructor(
             AlarmManagerCompat.setExactAndAllowWhileIdle(
                 alarmManager,
                 AlarmManager.RTC_WAKEUP,
-                dateTime.toInstant(zoneOffset).toEpochMilli() + 5000,
+                dateTime.toInstant(zoneOffset).toEpochMilli() + 15000,
                 pendingIntent
             )
         }

@@ -203,7 +203,8 @@ class MedicationDetailViewModel @Inject constructor(
             // TODO: show some message
             when {
                 result.isSuccess -> {
-                    alarmManager.set(alarm = alarm.copy(next = LocalDateTime.now()))
+                    val nextAlarm = getNextAlarm(alarm)
+                    alarmManager.set(alarm = alarm.copy(next = nextAlarm))
                 }
                 else -> {
                     println("${result.exceptionOrNull()}")
@@ -211,6 +212,17 @@ class MedicationDetailViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getNextAlarm(alarm: MedsAlarm) : LocalDateTime? {
+        return alarm.startsOn?.let { startsOnDateTime ->
+            if (startsOnDateTime.isAfter(LocalDateTime.now())) {
+                startsOnDateTime
+            } else {
+                startsOnDateTime.plusHours(alarm.repeatingInterval.ordinal.toLong())
+            }
+        }
+    }
+
 
     fun onCancelButtonClick() {
         // TODO

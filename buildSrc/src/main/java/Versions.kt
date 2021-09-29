@@ -1,4 +1,4 @@
-internal object Versions {
+object Versions {
     const val compose = "1.1.0-alpha03"
 
     const val androidMaterial = "1.4.0"
@@ -20,7 +20,10 @@ internal object Versions {
 
     const val gradleVersionsPlugin = "0.39.0"
     const val hiltAndroid = "2.38.1"
+    const val hiltWorkManager = "1.0.0"
     const val jetBrainsCoroutines = "1.5.1"
+
+    const val workManager = "2.6.0"
 
     // tests
     const val androidxComposeJunit = compose
