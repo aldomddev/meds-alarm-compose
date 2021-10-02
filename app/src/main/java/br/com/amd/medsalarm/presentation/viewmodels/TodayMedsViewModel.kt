@@ -42,7 +42,7 @@ class TodayMedsViewModel @Inject constructor (
 
     fun removeAlarm(alarm: MedsAlarm) {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteAlarmUseCase(DeleteAlarmUseCase.Params(alarm))
+            deleteAlarmUseCase(alarm)
         }
     }
 

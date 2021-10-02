@@ -7,13 +7,9 @@ import javax.inject.Inject
 class DeleteAlarmUseCase @Inject constructor(
     private val alarmsRepository: MedsAlarmRepository
 ) {
-    suspend operator fun invoke(params: Params): Result<Unit> {
+    suspend operator fun invoke(alarm: MedsAlarm): Result<Unit> {
         return kotlin.runCatching {
-            alarmsRepository.delete(alarm = params.alarm)
+            alarmsRepository.delete(alarm = alarm)
         }
     }
-
-    data class Params(
-        val alarm: MedsAlarm
-    )
 }

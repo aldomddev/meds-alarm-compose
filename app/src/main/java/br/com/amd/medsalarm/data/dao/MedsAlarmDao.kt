@@ -16,6 +16,9 @@ interface MedsAlarmDao {
     @Query("SELECT * FROM meds_alarm WHERE id = :id")
     fun getAlarmById(id: Int): MedsAlarmEntity
 
+    @Query("SELECT * FROM meds_alarm WHERE enabled = 'true'")
+    fun getEnabledAlarms(): List<MedsAlarmEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveOrUpdate(alarm: MedsAlarmEntity)
 

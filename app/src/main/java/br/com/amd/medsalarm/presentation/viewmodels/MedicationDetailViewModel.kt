@@ -197,8 +197,7 @@ class MedicationDetailViewModel @Inject constructor(
                 endsOn = getEndsOnDateTime(),
                 repeatingInterval = interval.toDomain()
             )
-            val params = SaveAlarmUseCase.Params(alarm = alarm)
-            val result = saveAlarmUseCase(params)
+            val result = saveAlarmUseCase(alarm)
 
             // TODO: show some message
             when {
@@ -232,8 +231,7 @@ class MedicationDetailViewModel @Inject constructor(
         if (medsAlarmId > 0) {
             alarmInEditionId = medsAlarmId
             viewModelScope.launch(Dispatchers.IO) {
-                val params = GetAlarmByIdUseCase.Params(medsAlarmId)
-                getAlarmByIdUseCase(params)
+                getAlarmByIdUseCase(medsAlarmId)
                     .onSuccess { alarm ->
                         withContext(Dispatchers.Main) {
                             loadAlarmDataForEdition(alarm)
