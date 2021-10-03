@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.AlarmManagerCompat
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_ACTION
-import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_ID_EXTRA
+import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager
 import br.com.amd.medsalarm.domain.model.MedsAlarm
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -43,7 +43,7 @@ class MedsAlarmManagerImpl @Inject constructor(
     private fun getPendingIntentFor(alarm: MedsAlarm) : PendingIntent {
         val intent = Intent(context, MedsAlarmReceiver::class.java)
         intent.action = MEDS_ALARM_ACTION
-        intent.putExtra(MEDS_ALARM_ID_EXTRA, alarm.id)
+        intent.putExtra(MEDS_ALARM_NOTIFICATION_EXTRA, alarm.toMedsAlarmNotification())
 
         return PendingIntent.getBroadcast(
             context,

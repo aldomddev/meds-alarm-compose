@@ -14,6 +14,7 @@ object Dependencies {
         const val kotlinAndroid = "kotlin-android"
         const val kotlinAndroidExtensions = "kotlin-android-extensions"
         const val kotlinKapt = "kotlin-kapt"
+        const val kotlinParcelize = "kotlin-parcelize"
 
         const val navigationSageArgs = "androidx.navigation.safeargs.kotlin"
 

@@ -2,9 +2,10 @@ import Dependencies.Deps
 
 plugins {
     id(Dependencies.BuildPlugins.androidApplication)
+    id(Dependencies.BuildPlugins.daggerHiltAndroid)
     id(Dependencies.BuildPlugins.kotlinAndroid)
     id(Dependencies.BuildPlugins.kotlinKapt)
-    id(Dependencies.BuildPlugins.daggerHiltAndroid)
+    id(Dependencies.BuildPlugins.kotlinParcelize)
 }
 
 android {
