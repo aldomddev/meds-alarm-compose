@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.AlarmManagerCompat
+import br.com.amd.medsalarm.device.mapper.toMedsAlarmNotification
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_ACTION
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager

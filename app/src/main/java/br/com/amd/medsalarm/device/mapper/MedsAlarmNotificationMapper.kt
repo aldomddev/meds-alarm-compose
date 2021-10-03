@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm.device
+package br.com.amd.medsalarm.device.mapper
 
 import br.com.amd.medsalarm.device.model.MedsAlarmNotification
 import br.com.amd.medsalarm.domain.model.MedsAlarm

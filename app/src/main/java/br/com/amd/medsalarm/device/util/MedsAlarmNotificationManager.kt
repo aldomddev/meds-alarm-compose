@@ -24,7 +24,7 @@ class MedsAlarmNotificationManager @Inject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val channelId = getChannelId()
-            val channel = NotificationChannel(channelId, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(channelId, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
             channel.description = CHANNEL_DESCRIPTION
             channel.setShowBadge(true)
 
