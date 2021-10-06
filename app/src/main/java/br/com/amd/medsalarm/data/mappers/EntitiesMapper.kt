@@ -12,6 +12,7 @@ fun MedsAlarmEntity.toDomain() = MedsAlarm(
         next = next,
         repeatingInterval = repeatingInterval,
         repeatingIntervalUnit = repeatingIntervalUnit,
+        enabled = enabled,
         seen = seen
     )
 
@@ -26,6 +27,7 @@ fun MedsAlarm.toEntity() = MedsAlarmEntity(
         next = next,
         repeatingInterval = repeatingInterval,
         repeatingIntervalUnit = repeatingIntervalUnit,
+        enabled = enabled,
         seen = seen
     )
 

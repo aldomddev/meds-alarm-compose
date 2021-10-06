@@ -19,11 +19,11 @@ object Versions {
     const val materialDialogsDateTime = "0.6.0"
 
     const val gradleVersionsPlugin = "0.39.0"
-    const val hiltAndroid = "2.38.1"
-    const val hiltWorkManager = "1.0.0"
+    const val hiltAndroid = "2.39.1"
+    const val hiltExtensionCompiler = "1.0.0"
     const val jetBrainsCoroutines = "1.5.1"
 
-    const val workManager = "2.6.0"
+    const val workManager = "2.7.0-rc01"
 
     // tests
     const val androidxComposeJunit = compose

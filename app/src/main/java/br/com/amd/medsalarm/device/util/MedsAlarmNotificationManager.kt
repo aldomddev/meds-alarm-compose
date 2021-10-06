@@ -18,9 +18,6 @@ class MedsAlarmNotificationManager @Inject constructor(
     }
 
     private fun createNotificationChannel(context: Context) {
-
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val channelId = getChannelId()
@@ -28,7 +25,6 @@ class MedsAlarmNotificationManager @Inject constructor(
             channel.description = CHANNEL_DESCRIPTION
             channel.setShowBadge(true)
 
-            // Register the channel with the system
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }

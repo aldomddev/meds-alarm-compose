@@ -52,7 +52,8 @@ object Dependencies {
 
         const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hiltAndroid}"
         const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hiltAndroid}"
-        const val hiltAndroidWorkManager = "androidx.hilt:hilt-work:${Versions.hiltWorkManager}"
+        const val hiltExtensionCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltExtensionCompiler}"
+        const val hiltAndroidWorkManager = "androidx.hilt:hilt-work:${Versions.hiltExtensionCompiler}"
         const val jetBrainsCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.jetBrainsCoroutines}"
 
         const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManager}"
@@ -99,8 +100,13 @@ fun DependencyHandler.dependOnCompose() {
 
 fun DependencyHandler.dependOnHilt() {
     implementation(Deps.hiltAndroid)
-    implementation(Deps.hiltAndroidWorkManager)
     kapt(Deps.hiltAndroidCompiler)
+    dependOnHiltExtensions()
+}
+
+fun DependencyHandler.dependOnHiltExtensions() {
+    implementation(Deps.hiltAndroidWorkManager)
+    kapt(Deps.hiltExtensionCompiler)
 }
 
 fun DependencyHandler.dependOnRoom() {

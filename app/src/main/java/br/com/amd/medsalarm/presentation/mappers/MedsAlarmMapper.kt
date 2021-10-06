@@ -24,6 +24,7 @@ fun MedsAlarmVO.toDomain() = MedsAlarm(
         endsOn = endsOn,
         repeatingInterval = repeatingInterval,
         repeatingIntervalUnit = repeatingIntervalUnit,
+        enabled = enabled,
         seen = seen
 )
 

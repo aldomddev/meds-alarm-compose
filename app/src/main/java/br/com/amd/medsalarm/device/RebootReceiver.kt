@@ -3,19 +3,18 @@ package br.com.amd.medsalarm.device
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.work.WorkManager
-import javax.inject.Inject
+import br.com.amd.medsalarm.device.util.DeviceConstants.SCHEDULE_ALL_ALARMS
 
 class RebootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null && intent?.action == Intent.ACTION_BOOT_COMPLETED) {
 
-            val workRequest = AlarmRebootSchedulerWorker.schedule()
+            val workRequest = AlarmSchedulerWorker.schedule(alarmId = SCHEDULE_ALL_ALARMS)
             WorkManager.getInstance(context).enqueue(workRequest)
 
-            Toast.makeText(context, "Rebooted!", Toast.LENGTH_LONG).show()
+            println("Rebooted!")
         }
     }
 }

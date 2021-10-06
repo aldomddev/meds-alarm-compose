@@ -13,5 +13,6 @@ data class MedsAlarmVO(
     val repeatingInterval: RepeatingInterval = RepeatingInterval.EIGHT,
     val repeatingIntervalUnit: RepeatingIntervalUnit = RepeatingIntervalUnit.HOUR,
     val seen: Boolean = false,
+    val enabled: Boolean = true,
     val action: MedsAlarmActionVO = MedsAlarmActionVO.EDIT
 )
