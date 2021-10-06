@@ -85,7 +85,7 @@ private fun MedsAlarmItem(
                 .padding(all = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("13:00")
+            Text(text = alarmVO.next?.toLocalTime().toString() ?: "--:--")
 
             Spacer(modifier = Modifier.padding(start = 16.dp))
 
