@@ -7,6 +7,7 @@ import br.com.amd.medsalarm.device.util.DeviceConstants.SCHEDULE_ALL_ALARMS
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager
 import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.GetEnabledAlarmsUseCase
+import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ class AlarmSchedulerWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val getEnabledAlarmsUseCase: GetEnabledAlarmsUseCase,
     private val getAlarmByIdUseCase: GetAlarmByIdUseCase,
+    private val saveAlarmUseCase: SaveAlarmUseCase,
     private val medsAlarmManager: MedsAlarmManager
 ) : CoroutineWorker(appContext, workerParams) {
 
@@ -40,7 +42,9 @@ class AlarmSchedulerWorker @AssistedInject constructor(
             alarmId > 0 -> {
                 getAlarmByIdUseCase(alarmId).fold(
                     onSuccess = { alarm ->
-                        medsAlarmManager.set(alarm)
+                        val next = medsAlarmManager.set(alarm)
+                        saveAlarmUseCase(alarm.copy(next = next))
+
                         Result.success()
                     },
                     onFailure = { Result.failure() }

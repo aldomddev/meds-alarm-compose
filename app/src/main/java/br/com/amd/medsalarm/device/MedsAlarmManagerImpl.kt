@@ -22,7 +22,7 @@ class MedsAlarmManagerImpl @Inject constructor(
     private val alarmManager: AlarmManager
 ) : MedsAlarmManager {
 
-    override fun set(alarm: MedsAlarm) {
+    override fun set(alarm: MedsAlarm): LocalDateTime? {
         val next = getNextAlarm(alarm)
         next?.let { dateTime ->
             val pendingIntent = getPendingIntentFor(alarm = alarm)
@@ -39,6 +39,8 @@ class MedsAlarmManagerImpl @Inject constructor(
 
             println("AMD - Alarm set to ${dateTime.toString()}")
         }
+
+        return next
     }
 
     override fun cancel(alarm: MedsAlarm) {

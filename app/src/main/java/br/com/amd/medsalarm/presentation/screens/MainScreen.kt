@@ -23,6 +23,8 @@ import br.com.amd.medsalarm.presentation.mappers.toDomain
 import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
 import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import br.com.amd.medsalarm.presentation.model.NavigationItem
+import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
+import br.com.amd.medsalarm.presentation.viewmodels.MedsViewModel
 import br.com.amd.medsalarm.presentation.viewmodels.TodayMedsViewModel
 import br.com.amd.medsalarm.ui.widgets.BottomNavigationBar
 import kotlinx.coroutines.launch
@@ -82,11 +84,11 @@ private fun Navigator(navController: NavHostController) {
         }
 
         composable(NavigationItem.MyMeds.route) {
-            val todayMedsViewModel: TodayMedsViewModel = hiltViewModel()
+            val medsViewModel: MedsViewModel = hiltViewModel()
 
             val lifecycleOwner = LocalLifecycleOwner.current
-            val alarmsLifecycleAware = remember(todayMedsViewModel.viewState, lifecycleOwner) {
-                todayMedsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            val alarmsLifecycleAware = remember(medsViewModel.viewState, lifecycleOwner) {
+                medsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             }.collectAsState(initial = MedsAlarmListState.Loading)
 
             MedsListScreen(
@@ -98,7 +100,7 @@ private fun Navigator(navController: NavHostController) {
                         }
 
                         MedsAlarmActionVO.DELETE -> {
-                            todayMedsViewModel.removeAlarm(item.toDomain())
+                            medsViewModel.removeAlarm(item.toDomain())
                         }
                     }
                 }
@@ -113,7 +115,13 @@ private fun Navigator(navController: NavHostController) {
                 }
             )
         ) {
-            MedicationDetailScreen()
+            val medicationDetailViewModel: MedicationDetailViewModel = hiltViewModel()
+
+            MedicationDetailScreen(
+                viewModel = medicationDetailViewModel,
+                onSaveClicked = { navController.navigateUp() },
+                onCancelClicked = { navController.navigateUp() }
+            )
         }
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.amd.medsalarm.R
 import br.com.amd.medsalarm.presentation.model.RepeatingIntervalVO
 import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
@@ -29,7 +28,9 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
 @Composable
 fun MedicationDetailScreen(
-    viewModel: MedicationDetailViewModel = hiltViewModel()
+    viewModel: MedicationDetailViewModel,
+    onSaveClicked: () -> Unit,
+    onCancelClicked: () -> Unit,
 ) {
     val medication by viewModel.medicationText
     val description by viewModel.descriptionText
@@ -41,6 +42,11 @@ fun MedicationDetailScreen(
     val permanent by viewModel.endsOnDateTimeEnabled
 
     val repeatingSelection by viewModel.repeatingInterval
+
+    val alarmSaved by viewModel.alarmSaved
+    if (alarmSaved) {
+        onSaveClicked
+    }
 
     val scrollState = rememberScrollState()
 
@@ -190,7 +196,7 @@ fun MedicationDetailScreen(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth(),
-            onClick = { }
+            onClick = { onCancelClicked() }
         ) {
             Text("Cancelar")
         }

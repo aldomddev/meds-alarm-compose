@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import br.com.amd.medsalarm.R
+import br.com.amd.medsalarm.presentation.extensions.toFormattedString
 import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
 import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
@@ -85,7 +86,7 @@ private fun MedsAlarmItem(
                 .padding(all = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = alarmVO.next?.toLocalTime().toString() ?: "--:--")
+            Text(text = alarmVO.next?.toLocalTime().toFormattedString())
 
             Spacer(modifier = Modifier.padding(start = 16.dp))
 

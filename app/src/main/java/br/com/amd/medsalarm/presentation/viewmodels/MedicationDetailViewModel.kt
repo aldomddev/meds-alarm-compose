@@ -66,6 +66,9 @@ class MedicationDetailViewModel @Inject constructor(
     private val _repeatingInterval = mutableStateOf(value = RepeatingIntervalVO.EIGHT)
     val repeatingInterval = _repeatingInterval.toState()
 
+    private val _alarmSaved = mutableStateOf(false)
+    val alarmSaved = _alarmSaved.toState()
+
     init {
         loadAlarmDataForEdition(medsAlarmId = savedStateHandle.get<Int>("id") ?: 0)
     }
@@ -205,6 +208,7 @@ class MedicationDetailViewModel @Inject constructor(
             when {
                 result.isSuccess -> {
                     alarmManager.set(alarm)
+                    _alarmSaved.value = true
                 }
                 else -> {
                     println("${result.exceptionOrNull()}")

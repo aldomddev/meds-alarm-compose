@@ -11,7 +11,7 @@ interface MedsAlarmDao {
     fun all(): Flow<List<MedsAlarmEntity>>
 
     @Query("SELECT * FROM meds_alarm WHERE next BETWEEN :from AND :to AND enabled = :enabled AND seen = :seen ORDER BY datetime(next)")
-    fun findNextAlarmsForPeriod(from: LocalDateTime, to: LocalDateTime, enabled: Boolean = true, seen: Boolean = true): List<MedsAlarmEntity>
+    fun findNextAlarmsForPeriod(from: LocalDateTime, to: LocalDateTime, enabled: Boolean = true, seen: Boolean = true): Flow<List<MedsAlarmEntity>>
 
     @Query("SELECT * FROM meds_alarm WHERE id = :id")
     fun getAlarmById(id: Int): MedsAlarmEntity

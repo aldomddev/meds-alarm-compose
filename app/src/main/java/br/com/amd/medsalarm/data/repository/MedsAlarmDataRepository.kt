@@ -22,8 +22,8 @@ class MedsAlarmDataRepository @Inject constructor(
         to: LocalDateTime,
         enabled: Boolean,
         seen: Boolean
-    ): List<MedsAlarm> {
-        return dao.findNextAlarmsForPeriod(from, to, enabled, seen).toDomain()
+    ): Flow<List<MedsAlarm>> {
+        return dao.findNextAlarmsForPeriod(from, to, enabled, seen).transform { alarm -> emit(alarm.toDomain()) }
     }
 
     override suspend fun getEnabled(): List<MedsAlarm> {
