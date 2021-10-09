@@ -10,8 +10,8 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30")
+        classpath("com.android.tools.build:gradle:7.0.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
 
         classpath(Dependencies.BuildPlugins.daggerHiltAndroidGradle)
         classpath(Dependencies.BuildPlugins.gradleVersionsClasspath)
