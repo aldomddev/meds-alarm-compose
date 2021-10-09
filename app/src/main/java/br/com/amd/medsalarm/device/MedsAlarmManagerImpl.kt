@@ -73,7 +73,7 @@ class MedsAlarmManagerImpl @Inject constructor(
                         startsOnDateTime
                     } else {
                         val now = LocalDateTime.now()
-                        now.plusHours(alarm.repeatingInterval.interval.toLong())
+                        now.plusHours(alarm.repeatingInterval.toLong())
                     }
                 }
             }

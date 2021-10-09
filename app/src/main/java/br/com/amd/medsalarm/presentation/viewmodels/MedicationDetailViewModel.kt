@@ -9,6 +9,7 @@ import br.com.amd.medsalarm.domain.device.MedsAlarmManager
 import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
+import br.com.amd.medsalarm.domain.model.RepeatingInterval
 import br.com.amd.medsalarm.presentation.mappers.toDomain
 import br.com.amd.medsalarm.presentation.mappers.toPresenter
 import br.com.amd.medsalarm.presentation.model.RepeatingIntervalVO
@@ -65,6 +66,9 @@ class MedicationDetailViewModel @Inject constructor(
 
     private val _repeatingInterval = mutableStateOf(value = RepeatingIntervalVO.EIGHT)
     val repeatingInterval = _repeatingInterval.toState()
+
+    private val _customRepeatingInterval = mutableStateOf(value = "")
+    val customRepeatingInterval = _customRepeatingInterval.toState()
 
     private val _alarmSaved = mutableStateOf(false)
     val alarmSaved = _alarmSaved.toState()
@@ -188,6 +192,21 @@ class MedicationDetailViewModel @Inject constructor(
     fun onRepeatingIntervalChanged(value: RepeatingIntervalVO) {
         interval = value
         _repeatingInterval.value = value
+
+        if (value == RepeatingIntervalVO.CUSTOM) {
+            onCustomRepeatingIntervalChange(value = "24")
+        }
+    }
+
+    fun onPermanentCheckBoxClick() {
+        _endsOnDateTimeEnabled.value = !_endsOnDateTimeEnabled.value
+    }
+
+    fun onCustomRepeatingIntervalChange(value: String) {
+        val filteredValue = value.filter { it.isDigit() }
+        if (filteredValue.length <= 2) {
+            _customRepeatingInterval.value = filteredValue
+        }
     }
 
     fun onSaveButtonClick() {
@@ -198,7 +217,7 @@ class MedicationDetailViewModel @Inject constructor(
                 description = description.trim(),
                 startsOn = getStartsOnDateTime(),
                 endsOn = getEndsOnDateTime(),
-                repeatingInterval = interval.toDomain(),
+                repeatingInterval = interval.toInt(),
                 enabled = true
             )
             val nextAlarm = alarmManager.getNextAlarm(alarm)
@@ -259,6 +278,20 @@ class MedicationDetailViewModel @Inject constructor(
         onTimeChange(time = endTime)
         isChoosingEndsOnDateTime = false
 
-        _repeatingInterval.value = alarm.repeatingInterval.toPresenter()
+        val interval = RepeatingInterval.values().filter { it.interval == alarm.repeatingInterval }
+        _repeatingInterval.value = if(interval.isNotEmpty()) {
+            interval.first().toPresenter()
+        } else {
+            _customRepeatingInterval.value = alarm.repeatingInterval.toString()
+            RepeatingIntervalVO.CUSTOM
+        }
+    }
+
+    private fun RepeatingIntervalVO.toInt(): Int {
+        return if (_repeatingInterval.value == RepeatingIntervalVO.CUSTOM) {
+            _customRepeatingInterval.value.toInt()
+        } else {
+            _repeatingInterval.value.interval
+        }
     }
 }
