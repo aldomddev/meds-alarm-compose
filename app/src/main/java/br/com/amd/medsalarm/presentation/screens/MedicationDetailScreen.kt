@@ -45,7 +45,7 @@ fun MedicationDetailScreen(
 
     val alarmSaved by viewModel.alarmSaved
     if (alarmSaved) {
-        onSaveClicked
+        onSaveClicked()
     }
 
     val scrollState = rememberScrollState()
