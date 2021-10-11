@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import br.com.amd.medsalarm.domain.interactors.DeleteAlarmUseCase
 import br.com.amd.medsalarm.domain.interactors.GetAllAlarmsUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
+import br.com.amd.medsalarm.presentation.extensions.toTimeUntilNextAlarmFrom
 import br.com.amd.medsalarm.presentation.mappers.toPresenter
 import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
+import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +36,13 @@ class MedsViewModel @Inject constructor(
                 if (alarms.isEmpty()) {
                     emit(MedsAlarmListState.Empty)
                 } else {
-                    emit(MedsAlarmListState.Loaded(alarms.toPresenter()))
+                    val now = LocalDateTime.now()
+                    val newAlarmsList = mutableListOf<MedsAlarmVO>()
+                    alarms.forEach { alarm ->
+                        newAlarmsList.add(alarm.toPresenter().copy(timeToNextAlarmVO = alarm.next.toTimeUntilNextAlarmFrom(fromDateTime = now)))
+                    }
+                    println("Stop!")
+                    emit(MedsAlarmListState.Loaded(newAlarmsList))
                 }
             }
     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ import br.com.amd.medsalarm.presentation.extensions.toFormattedString
 import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
 import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
+import br.com.amd.medsalarm.presentation.model.TimeToNextAlarmVO
 import java.time.LocalDateTime
 
 @ExperimentalMaterialApi
@@ -94,6 +96,15 @@ private fun MedsAlarmItem(
                 Text(alarmVO.medication)
                 Spacer(modifier = Modifier.padding(start = 8.dp))
                 Text(alarmVO.description)
+
+                val nextAlarmString = alarmVO.toNextAlarmString()
+                if (nextAlarmString.isNotEmpty()) {
+                    Spacer(modifier = Modifier.padding(start = 8.dp))
+                    Text(
+                        color = Color.Gray,
+                        text = alarmVO.toNextAlarmString()
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.weight(1.0f))
@@ -143,13 +154,42 @@ private fun ItemDropdownMenu(
         DropdownMenuItem(
             onClick = { onEditClick() }
         ) {
-            Text("Editar")
+            Text(stringResource(id = R.string.common_edit))
         }
         DropdownMenuItem(
             onClick = { onDeleteClick() }
         ) {
-            Text("Deletar")
+            Text(stringResource(id = R.string.common_delete))
         }
+    }
+}
+
+private fun MedsAlarmVO.toNextAlarmString(): String {
+    if (this.next == null || this.timeToNextAlarmVO == null) {
+        return ""
+    }
+    return when {
+        this.timeToNextAlarmVO.isTomorrow -> "Amanhã às ${this.next.toLocalTime().toFormattedString()}"
+        this.timeToNextAlarmVO.days > 0 -> {
+            var str = "Em ${this.timeToNextAlarmVO.days} dia(s)"
+            if (this.timeToNextAlarmVO.hours > 0) {
+                str += ", ${this.timeToNextAlarmVO.hours} hora(s)"
+            }
+
+            str
+        }
+        this.timeToNextAlarmVO.hours > 0 -> {
+            var str = "Em ${this.timeToNextAlarmVO.hours} hora(s)"
+            if (this.timeToNextAlarmVO.minutes > 0) {
+                str += ", ${this.timeToNextAlarmVO.minutes} minuto(s)"
+            }
+
+            str
+        }
+        this.timeToNextAlarmVO.minutes > 0 -> {
+            "Em ${this.timeToNextAlarmVO.minutes} minuto(s)"
+        }
+        else -> ""
     }
 }
 

@@ -59,13 +59,13 @@ private fun DialogButtons(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Button(onClick = { onPositiveButtonClick.invoke() }) {
-            Text(text = stringResource(id = R.string.medication_details_dialog_positive_button))
+            Text(text = stringResource(id = R.string.common_select))
         }
 
         Spacer(modifier = Modifier.width(16.dp))
 
         Button(onClick = { onNegativeButtonClick.invoke() }) {
-            Text(text = stringResource(id = R.string.medication_details_dialog_negative_button))
+            Text(text = stringResource(id = R.string.common_cancel))
         }
     }
 }
