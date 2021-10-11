@@ -12,6 +12,7 @@
 
     <string name="alarm_list.next_alarm_tomorrow">Amanhã às %1$s</string>
     <string name="alarm_list.next_alarm">Em %1$s dia(s), %2$s minuto(s)</string>
+    <string name="alarm_list.no_medications">"Nenhuma medicação agendada!"</string>
 
     <string name="medication_details.medication">Medicamento</string>
     <string name="medication_details.medication_placeholder">Tilenol</string>

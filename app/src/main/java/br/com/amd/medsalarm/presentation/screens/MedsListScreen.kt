@@ -36,7 +36,7 @@ fun MedsListScreen(
     onItemClick: (MedsAlarmVO) -> Unit
 ) {
     when(viewState) {
-        MedsAlarmListState.Empty -> Text("Empty")
+        MedsAlarmListState.Empty -> EmptyList()
         MedsAlarmListState.Error -> {}
         is MedsAlarmListState.Loaded -> {
             MedsAlarmList(
@@ -162,6 +162,14 @@ private fun ItemDropdownMenu(
             Text(stringResource(id = R.string.common_delete))
         }
     }
+}
+
+@Composable
+private fun EmptyList() {
+    Text(
+        modifier = Modifier.fillMaxSize(),
+        text = stringResource(id = R.string.alarm_list_no_medications)
+    )
 }
 
 private fun MedsAlarmVO.toNextAlarmString(): String {
