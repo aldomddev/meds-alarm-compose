@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">Meds Alarm</string>
 
+    <string name="common.save" >Salvar</string>
+    <string name="common.cancel">Cancelar</string>
+    <string name="common.select">Selecionar</string>
+
     <string name="navigation.today_meds_title" >Hoje</string>
     <string name="navigation.my_meds_title">Medicamentos</string>
+
+    <string name="alarm_list.next_alarm_tomorrow">Amanhã às %1$s</string>
+    <string name="alarm_list.next_alarm">Em %1$s dia(s), %2$s minuto(s)</string>
 
     <string name="medication_details.medication">Medicamento</string>
     <string name="medication_details.medication_placeholder">Tilenol</string>
@@ -10,14 +17,14 @@
     <string name="medication_details.description_placeholder">Tomar 1 comprimido</string>
     <string name="medication_details.start_on">Iniciar em</string>
     <string name="medication_details.ends_on">Finalizar em</string>
+    <string name="medication_details.permanent">Permanente</string>
+    <string name="medication_details.repeat_at_every">Repetir a cada (horas)</string>
 
     <string name="medication_details_dialog.title">Selecione a data e hora de início</string>
-    <string name="medication_details_dialog.positive_button">Selecionar</string>
-    <string name="medication_details_dialog.negative_button">Cancelar</string>
 
     <string name="repeat_every_four_hours" translatable="false">4</string>
     <string name="repeat_every_six_hours" translatable="false">6</string>
     <string name="repeat_every_eight_hours" translatable="false">8</string>
     <string name="repeat_every_twelve_hours" translatable="false">12</string>
-    <string name="repeat_custom" translatable="false">Outro</string>
+    <string name="repeat_custom">Outro</string>
 </resources>

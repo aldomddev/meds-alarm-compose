@@ -6,7 +6,7 @@ import br.com.amd.medsalarm.domain.model.RepeatingInterval
 
 enum class RepeatingIntervalVO(
     val interval: Int,
-    @StringRes val intervalRes: Int
+    @StringRes val intervalStringRes: Int
 ) {
     CUSTOM(RepeatingInterval.CUSTOM.ordinal, R.string.repeat_custom),
     FOUR(RepeatingInterval.FOUR.ordinal, R.string.repeat_every_four_hours),

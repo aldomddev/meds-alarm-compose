@@ -111,7 +111,7 @@ fun MedicationDetailScreen(
                 onCheckedChange = { viewModel.onPermanentCheckBoxClick() }
             )
 
-            Text(text = "Permanente")
+            Text(text = stringResource(id = R.string.medication_details_permanent))
         }
 
         // ends on
@@ -157,7 +157,7 @@ fun MedicationDetailScreen(
                 .fillMaxWidth(),
             onClick = { viewModel.onSaveButtonClick() }
         ) {
-            Text("Salvar")
+            Text(stringResource(id = R.string.common_save))
         }
 
         // cancel
@@ -167,7 +167,7 @@ fun MedicationDetailScreen(
                 .fillMaxWidth(),
             onClick = { onCancelClicked() }
         ) {
-            Text("Cancelar")
+            Text(stringResource(id = R.string.common_cancel))
         }
     }
 }
@@ -183,7 +183,7 @@ private fun RepeatingIntervalRadioGroup(
             .padding(top = 16.dp)
             .fillMaxWidth()
         ) {
-        Text(text = "Repetir a cada (horas)")
+        Text(text = stringResource(id = R.string.medication_details_repeat_at_every))
 
         Row(
             modifier = Modifier.padding(top = 1.dp),
@@ -195,7 +195,7 @@ private fun RepeatingIntervalRadioGroup(
                     selected = item == selectedItem,
                     onClick = { onSelectionChanged.invoke(item) }
                 )
-                Text(text = stringResource(id = item.intervalRes))
+                Text(text = stringResource(id = item.intervalStringRes))
             }
         }
     }
@@ -268,9 +268,9 @@ private fun DatePickerDialog(
         dialogState = dialogState,
         onCloseRequest = {},
         buttons = {
-            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
+            positiveButton(stringResource(id = R.string.common_select))
             negativeButton(
-                stringResource(id = R.string.medication_details_dialog_negative_button),
+                stringResource(id = R.string.common_cancel),
                 onClick = { viewModel.onDateChange(date = null) }
             )
         }
@@ -309,9 +309,9 @@ private fun TimePickerDialog(
         dialogState = dialogState,
         onCloseRequest = {},
         buttons = {
-            positiveButton(stringResource(id = R.string.medication_details_dialog_positive_button))
+            positiveButton(stringResource(id = R.string.common_select))
             negativeButton(
-                stringResource(id = R.string.medication_details_dialog_negative_button),
+                stringResource(id = R.string.common_cancel),
                 onClick = { viewModel.onTimeChange(time = null) }
             )
         }
