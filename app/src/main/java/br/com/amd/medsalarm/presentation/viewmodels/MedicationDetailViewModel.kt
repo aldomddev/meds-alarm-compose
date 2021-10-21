@@ -21,6 +21,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -175,7 +176,7 @@ class MedicationDetailViewModel @Inject constructor(
 
     private fun getStartsOnDateTime(): LocalDateTime? {
         return if (startsOnDate != null && startsOnTime != null) {
-            LocalDateTime.of(startsOnDate, startsOnTime)
+            LocalDateTime.of(startsOnDate, startsOnTime?.truncatedTo(ChronoUnit.MINUTES))
         } else {
             null
         }
@@ -183,7 +184,7 @@ class MedicationDetailViewModel @Inject constructor(
 
     private fun getEndsOnDateTime(): LocalDateTime? {
         return if (endsOnDate != null && endsOnTime != null) {
-            LocalDateTime.of(endsOnDate, endsOnTime)
+            LocalDateTime.of(endsOnDate, endsOnTime?.truncatedTo(ChronoUnit.MINUTES))
         } else {
             null
         }
