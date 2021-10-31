@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 ![](https://img.shields.io/badge/Kotlin-0095D5?&style=for-the-badge&logo=kotlin&logoColor=white)
-![GitHub repo size](https://img.shields.io/github/languages/code-size/aldomddev/meds-alarm-compose)
+![GitHub repo size](https://img.shields.io/github/languages/code-size/aldomddev/meds-alarm-compose?style=for-the-badge&logo=github)
 
 ## A simple meds alarm Android app using [Jetpack Compose](https://developer.android.com/jetpack/compose)
 
