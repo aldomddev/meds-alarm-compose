@@ -23,6 +23,8 @@ object Versions {
     const val hiltExtensionCompiler = "1.0.0"
     const val jetBrainsCoroutines = "1.5.2"
 
+    const val timber = "5.0.1"
+
     const val workManager = "2.7.0-rc01"
 
     // tests

@@ -14,7 +14,7 @@ class RebootReceiver : BroadcastReceiver() {
             val workRequest = AlarmSchedulerWorker.schedule(alarmId = SCHEDULE_ALL_ALARMS)
             WorkManager.getInstance(context).enqueue(workRequest)
 
-            println("Rebooted!")
+            println("AMD - Rebooted!")
         }
     }
 }

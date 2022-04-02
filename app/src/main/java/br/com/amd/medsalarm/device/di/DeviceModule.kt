@@ -1,7 +1,7 @@
 package br.com.amd.medsalarm.device.di
 
-import android.app.AlarmManager
 import android.content.Context
+import br.com.amd.medsalarm.core.extentions.getAlarmManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,5 @@ import dagger.hilt.components.SingletonComponent
 object DeviceModule {
 
     @Provides
-    fun provideAlarmManager(@ApplicationContext context: Context): AlarmManager {
-        return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    }
+    fun provideAlarmManager(@ApplicationContext context: Context) = context.getAlarmManager()
 }

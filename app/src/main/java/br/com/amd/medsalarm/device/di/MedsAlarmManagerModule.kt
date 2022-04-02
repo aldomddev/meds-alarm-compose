@@ -1,6 +1,8 @@
 package br.com.amd.medsalarm.device.di
 
+import br.com.amd.medsalarm.device.AlarmPermissionImpl
 import br.com.amd.medsalarm.device.MedsAlarmManagerImpl
+import br.com.amd.medsalarm.domain.device.AlarmPermission
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,8 @@ abstract class MedsAlarmManagerModule {
     @Binds
     @Singleton
     abstract fun bindMedsAlarmManager(impl: MedsAlarmManagerImpl): MedsAlarmManager
+
+    @Binds
+    @Singleton
+    abstract fun bindAlarmPermission(impl: AlarmPermissionImpl): AlarmPermission
 }

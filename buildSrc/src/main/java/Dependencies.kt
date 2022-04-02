@@ -56,6 +56,8 @@ object Dependencies {
         const val hiltAndroidWorkManager = "androidx.hilt:hilt-work:${Versions.hiltExtensionCompiler}"
         const val jetBrainsCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.jetBrainsCoroutines}"
 
+        const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+
         const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManager}"
 
         // Tests

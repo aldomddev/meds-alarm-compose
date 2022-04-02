@@ -70,11 +70,12 @@ dependencies {
     // date time non-official dialogs
     implementation(Deps.materialDialogsDateTime)
     // libs
-    dependOnCoroutines()
-    dependOnLifecycle()
     dependOnCompose()
+    dependOnCoroutines()
     dependOnHilt()
+    dependOnLifecycle()
     dependOnRoom()
+    implementation(Deps.timber)
     // test
     dependOnTests()
 }

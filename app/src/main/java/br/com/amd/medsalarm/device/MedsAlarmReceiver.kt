@@ -18,6 +18,8 @@ class MedsAlarmReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationManager: MedsAlarmNotificationManager
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        println("AMD - Alarm fired!")
+
         if (context == null) return
 
         Toast.makeText(context, "Fired!", Toast.LENGTH_LONG).show()
