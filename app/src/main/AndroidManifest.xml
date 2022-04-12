@@ -16,6 +16,7 @@
         android:theme="@style/Theme.MedsAlarm">
         <receiver
             android:name=".device.MedsAlarmReceiver"
+            android:process=":service"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

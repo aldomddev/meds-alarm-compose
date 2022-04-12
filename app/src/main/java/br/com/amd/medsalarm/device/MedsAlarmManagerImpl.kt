@@ -33,10 +33,17 @@ class MedsAlarmManagerImpl @Inject constructor(
             val zoneId = ZoneId.of(ZoneOffset.systemDefault().toString())
             val zoneOffset = zoneId.rules.getOffset(dateTime)
 
-            AlarmManagerCompat.setExactAndAllowWhileIdle(
+//            AlarmManagerCompat.setExactAndAllowWhileIdle(
+//                alarmManager,
+//                AlarmManager.RTC_WAKEUP,
+//                dateTime.toInstant(zoneOffset).toEpochMilli(),
+//                pendingIntent
+//            )
+
+            AlarmManagerCompat.setAlarmClock(
                 alarmManager,
-                AlarmManager.RTC_WAKEUP,
                 dateTime.toInstant(zoneOffset).toEpochMilli(),
+                pendingIntent,
                 pendingIntent
             )
 
@@ -78,8 +85,8 @@ class MedsAlarmManagerImpl @Inject constructor(
                     if (startsOnDateTime.isAfter(LocalDateTime.now())) {
                         startsOnDateTime
                     } else {
-                        //alarm.next?.plusHours(alarm.repeatingInterval.toLong())
-                        alarm.next?.plusMinutes(alarm.repeatingInterval.toLong())
+                        alarm.next?.plusHours(alarm.repeatingInterval.toLong())
+                        //alarm.next?.plusMinutes(alarm.repeatingInterval.toLong())
                     }
                 }
             }
