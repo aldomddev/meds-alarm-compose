@@ -33,19 +33,19 @@ class MedsAlarmManagerImpl @Inject constructor(
             val zoneId = ZoneId.of(ZoneOffset.systemDefault().toString())
             val zoneOffset = zoneId.rules.getOffset(dateTime)
 
-//            AlarmManagerCompat.setExactAndAllowWhileIdle(
-//                alarmManager,
-//                AlarmManager.RTC_WAKEUP,
-//                dateTime.toInstant(zoneOffset).toEpochMilli(),
-//                pendingIntent
-//            )
-
-            AlarmManagerCompat.setAlarmClock(
+            AlarmManagerCompat.setExactAndAllowWhileIdle(
                 alarmManager,
+                AlarmManager.RTC_WAKEUP,
                 dateTime.toInstant(zoneOffset).toEpochMilli(),
-                pendingIntent,
                 pendingIntent
             )
+
+//            AlarmManagerCompat.setAlarmClock(
+//                alarmManager,
+//                dateTime.toInstant(zoneOffset).toEpochMilli(),
+//                pendingIntent,
+//                pendingIntent
+//            )
 
             println("AMD - Alarm set to $dateTime")
         }
