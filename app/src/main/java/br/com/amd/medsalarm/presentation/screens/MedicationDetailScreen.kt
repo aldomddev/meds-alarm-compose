@@ -228,7 +228,7 @@ private fun CustomRepeatingInterval(
                             .padding(8.dp)
                             .clickable { onValueChange(value.increment()) },
                         painter = painterResource(id = R.drawable.ic_plus),
-                        colorFilter = ColorFilter.tint(Color.Black),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
                         contentDescription = ""
                     )
                 },
@@ -238,14 +238,13 @@ private fun CustomRepeatingInterval(
                             .padding(8.dp)
                             .clickable { onValueChange(value.decrement()) },
                         painter = painterResource(id = R.drawable.ic_minus),
-                        colorFilter = ColorFilter.tint(Color.Black),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
                         contentDescription = ""
                     )
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.Gray,
                     disabledTextColor = Color.Transparent,
-                    backgroundColor = Color.White,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent

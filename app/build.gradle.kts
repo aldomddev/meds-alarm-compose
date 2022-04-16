@@ -61,12 +61,13 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
+    implementation(Deps.accompanistSystemUiController)
     implementation(Deps.androidMaterial)
     implementation(Deps.androidxAppCompat)
     implementation(Deps.androidxCore)
     implementation(Deps.workManager)
     // for java.time support
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring(Deps.desugarJdkLibs)
     // date time non-official dialogs
     implementation(Deps.materialDialogsDateTime)
     // libs

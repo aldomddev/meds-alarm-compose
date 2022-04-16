@@ -1,6 +1,8 @@
 object Versions {
     const val compose = "1.1.1"
 
+    const val accompanist = "0.23.1"
+
     const val androidMaterial = "1.5.0"
 
     const val androidxActivityCompose = "1.4.0"
@@ -15,6 +17,8 @@ object Versions {
     const val androidxLifecycle = "2.4.1"
     const val androidxNavigationCompose = "2.4.2"
     const val androidxRoom = "2.4.2"
+
+    const val desugarJdkLibs = "1.1.5"
 
     const val materialDialogsDateTime = "0.7.0"
 

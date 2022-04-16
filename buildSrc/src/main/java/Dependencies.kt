@@ -28,6 +28,8 @@ object Dependencies {
     }
 
     object Deps {
+        const val accompanistSystemUiController = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
+
         const val androidMaterial = "com.google.android.material:material:${Versions.androidMaterial}"
 
         const val androidxActivityCompose = "androidx.activity:activity-compose:${Versions.androidxActivityCompose}"
@@ -47,6 +49,8 @@ object Dependencies {
         const val androidxRoomExtensions = "androidx.room:room-ktx:${Versions.androidxRoom}"
         const val androidxRoomRuntime = "androidx.room:room-runtime:${Versions.androidxRoom}"
         const val androidxRoomTesting = "androidx.room:room-testing:${Versions.androidxRoom}"
+
+        const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:${Versions.desugarJdkLibs}"
 
         const val materialDialogsDateTime = "io.github.vanpra.compose-material-dialogs:datetime:${Versions.materialDialogsDateTime}"
 
