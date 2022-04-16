@@ -118,7 +118,7 @@ private fun MedsAlarmItem(
                     }
                     .clickable { showMenuItem.value = true },
                 painter = painterResource(id = R.drawable.ic_more_vertical),
-                colorFilter = ColorFilter.tint(Color.Black),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                 contentDescription = ""
             )
         }
