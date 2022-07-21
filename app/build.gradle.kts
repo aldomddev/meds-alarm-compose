@@ -9,7 +9,8 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    namespace = "br.com.amd.medsalarm"
+    compileSdk = 32
 
     defaultConfig {
         applicationId = "br.com.amd.medsalarm"
@@ -49,7 +50,7 @@ android {
         viewBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = Versions.androidxComposeCompiler
     }
     packagingOptions {
         resources {
