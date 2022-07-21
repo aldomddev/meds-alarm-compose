@@ -30,4 +30,6 @@
     <string name="repeat_every_eight_hours" translatable="false">8</string>
     <string name="repeat_every_twelve_hours" translatable="false">12</string>
     <string name="repeat_custom">Outro</string>
+
+    <string name="meds_taken_action_button">Ingerido</string>
 </resources>

@@ -74,6 +74,10 @@ class MedsAlarmReceiver : BroadcastReceiver() {
                     }
                 }
             }
+            DeviceConstants.MEDS_TAKEN_ACTION -> {
+                val alarmId = intent.getIntExtra(DeviceConstants.MEDS_TAKEN_ALARM_ID_EXTRA, 0)
+                notificationManager.cancelNotification(alarmId)
+            }
             ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
                 scheduleAllAlarms()
             }
