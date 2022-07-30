@@ -1,5 +1,5 @@
 object Versions {
-    const val compose = "1.2.0-rc03"
+    const val compose = "1.2.0"
 
     const val accompanist = "0.23.1"
 
