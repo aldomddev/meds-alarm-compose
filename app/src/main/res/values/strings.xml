@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Meds Alarm</string>
 
-    <string name="common.save" >Salvar</string>
+    <string name="common.save">Salvar</string>
     <string name="common.cancel">Cancelar</string>
     <string name="common.select">Selecionar</string>
     <string name="common.edit">Editar</string>
     <string name="common.delete">Deletar</string>
 
-    <string name="navigation.today_meds_title" >Hoje</string>
+    <string name="navigation.today_meds_title">Hoje</string>
     <string name="navigation.my_meds_title">Medicamentos</string>
 
     <string name="alarm_list.next_alarm_tomorrow">Amanhã às %1$s</string>

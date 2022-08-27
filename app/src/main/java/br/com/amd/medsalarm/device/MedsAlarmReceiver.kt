@@ -4,9 +4,8 @@ import android.app.AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHA
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
-import androidx.work.ListenableWorker
 import androidx.work.WorkManager
+import br.com.amd.medsalarm.device.extensions.isScreenOn
 import br.com.amd.medsalarm.device.model.MedsAlarmNotification
 import br.com.amd.medsalarm.device.util.DeviceConstants
 import br.com.amd.medsalarm.device.util.MedsAlarmNotificationManager
@@ -17,8 +16,8 @@ import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MedsAlarmReceiver : BroadcastReceiver() {
@@ -32,32 +31,36 @@ class MedsAlarmReceiver : BroadcastReceiver() {
     val coroutineScope = CoroutineScope(SupervisorJob())
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        println("AMD - Alarm fired! Action = ${intent?.action}")
+        println("AMD - Alarm fired! Action = ${intent?.action}, screen on = ${context.isScreenOn()}")
 
         if (context == null) return
 
-        coroutineScope.launch {
-            handleAction(intent)
-        }
-
-//        try {
-//            when(intent?.action) {
-//                DeviceConstants.MEDS_ALARM_ACTION -> {
-//                    val alarm = intent.getParcelableExtra<MedsAlarmNotification>(DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA)
-//                    alarm?.let {
-//                        notificationManager.createMedsAlarmNotification(alarm)
-//                        val workRequest = AlarmSchedulerWorker.schedule(alarmId = alarm.id)
-//                        WorkManager.getInstance(context).enqueue(workRequest)
-//                    }
-//                }
-//                ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
-//                    val workRequest = AlarmSchedulerWorker.schedule(alarmId = DeviceConstants.SCHEDULE_ALL_ALARMS)
-//                    WorkManager.getInstance(context).enqueue(workRequest)
-//                }
-//            }
-//        } catch (error: Throwable) {
-//            println(error)
+//        coroutineScope.launch {
+//            handleAction(intent)
 //        }
+
+        try {
+            when(intent?.action) {
+                DeviceConstants.MEDS_ALARM_ACTION -> {
+                    val alarm = intent.getParcelableExtra<MedsAlarmNotification>(DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA)
+                    alarm?.let {
+                        notificationManager.createMedsAlarmNotification(alarm)
+                        val workRequest = AlarmSchedulerWorker.schedule(alarmId = alarm.id)
+                        WorkManager.getInstance(context).enqueue(workRequest)
+                    }
+                }
+                DeviceConstants.MEDS_TAKEN_ACTION -> {
+                    val alarmId = intent.getIntExtra(DeviceConstants.MEDS_TAKEN_ALARM_ID_EXTRA, 0)
+                    notificationManager.cancelNotification(alarmId)
+                }
+                ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
+                    val workRequest = AlarmSchedulerWorker.schedule(alarmId = DeviceConstants.SCHEDULE_ALL_ALARMS)
+                    WorkManager.getInstance(context).enqueue(workRequest)
+                }
+            }
+        } catch (error: Throwable) {
+            println(error)
+        }
     }
 
     private suspend fun handleAction(intent: Intent?) {

@@ -6,6 +6,7 @@ plugins {
     id(Dependencies.BuildPlugins.kotlinAndroid)
     id(Dependencies.BuildPlugins.kotlinKapt)
     id(Dependencies.BuildPlugins.kotlinParcelize)
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -67,6 +68,8 @@ dependencies {
     implementation(Deps.androidxAppCompat)
     implementation(Deps.androidxCore)
     implementation(Deps.workManager)
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("com.google.android.material:material:1.4.0")
     // for java.time support
     coreLibraryDesugaring(Deps.desugarJdkLibs)
     // date time non-official dialogs

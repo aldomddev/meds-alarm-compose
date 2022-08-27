@@ -13,11 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedsAlarm">
+
         <receiver
             android:name=".device.MedsAlarmReceiver"
-            android:process=":service"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:process=":service">
             <intent-filter>
                 <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
                 <action android:name="br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_TAKEN_ACTION" />
@@ -27,10 +28,11 @@
             android:name=".device.RebootReceiver"
             android:enabled="true"
             android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED"/>
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
+
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
@@ -43,11 +45,18 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".presentation.FullScreenActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:showOnLockScreen="true" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
+
             <!-- If you are using androidx.startup to initialize other components -->
             <meta-data
                 android:name="androidx.work.WorkManagerInitializer"

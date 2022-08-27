@@ -6,7 +6,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.view.Display
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.constraintlayout.motion.widget.Debug.getState
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import br.com.amd.medsalarm.R
@@ -15,6 +17,7 @@ import br.com.amd.medsalarm.device.MedsAlarmReceiver
 import br.com.amd.medsalarm.device.model.MedsAlarmNotification
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_TAKEN_ACTION
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_TAKEN_ALARM_ID_EXTRA
+import br.com.amd.medsalarm.presentation.FullScreenActivity
 import br.com.amd.medsalarm.presentation.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -48,6 +51,7 @@ class MedsAlarmNotificationManager @Inject constructor(
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setContentIntent(getMedsAlarmIntent())
+            .setFullScreenIntent(getMedsAlarmFullScreenIntent(), true)
             .setAutoCancel(false)
             .addAction(getMedicineTakenAction(alarmId = alarm.id))
             .build()
@@ -64,6 +68,19 @@ class MedsAlarmNotificationManager @Inject constructor(
     @OptIn(ExperimentalMaterialApi::class)
     private fun getMedsAlarmIntent(): PendingIntent {
         val intent = Intent(appContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        return PendingIntent.getActivity(
+            appContext,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    private fun getMedsAlarmFullScreenIntent(): PendingIntent {
+        val intent = Intent(appContext, FullScreenActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
