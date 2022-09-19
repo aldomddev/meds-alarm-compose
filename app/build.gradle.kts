@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "br.com.amd.medsalarm"
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "br.com.amd.medsalarm"
