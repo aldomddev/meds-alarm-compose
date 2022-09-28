@@ -12,8 +12,7 @@ fun MedsAlarmEntity.toDomain() = MedsAlarm(
         next = next,
         repeatingInterval = repeatingInterval,
         repeatingIntervalUnit = repeatingIntervalUnit,
-        enabled = enabled,
-        seen = seen
+        enabled = enabled
     )
 
 fun List<MedsAlarmEntity>.toDomain() = map { it.toDomain() }
@@ -27,8 +26,7 @@ fun MedsAlarm.toEntity() = MedsAlarmEntity(
         next = next,
         repeatingInterval = repeatingInterval,
         repeatingIntervalUnit = repeatingIntervalUnit,
-        enabled = enabled,
-        seen = seen
+        enabled = enabled
     )
 
 fun List<MedsAlarm>.toEntity() = map { it.toEntity() }

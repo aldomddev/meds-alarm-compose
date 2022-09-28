@@ -11,8 +11,7 @@ fun MedsAlarm.toPresenter() = MedsAlarmVO(
         endsOn = endsOn,
         next = next,
         repeatingInterval = repeatingInterval,
-        repeatingIntervalUnit = repeatingIntervalUnit,
-        seen = seen
+        repeatingIntervalUnit = repeatingIntervalUnit
     )
 
 fun List<MedsAlarm>.toPresenter() = map { it.toPresenter() }
@@ -26,8 +25,7 @@ fun MedsAlarmVO.toDomain() = MedsAlarm(
         next = next,
         repeatingInterval = repeatingInterval,
         repeatingIntervalUnit = repeatingIntervalUnit,
-        enabled = enabled,
-        seen = seen
+        enabled = enabled
 )
 
 fun List<MedsAlarmVO>.toDomain() = map { it.toDomain() }

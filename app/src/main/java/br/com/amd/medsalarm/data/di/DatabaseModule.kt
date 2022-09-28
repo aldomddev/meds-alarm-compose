@@ -22,7 +22,8 @@ object DatabaseModule {
             context,
             MedsAlarmDatabase::class.java,
             "meds_alarm.db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Singleton
