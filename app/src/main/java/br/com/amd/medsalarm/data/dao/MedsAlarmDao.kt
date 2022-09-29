@@ -2,6 +2,7 @@ package br.com.amd.medsalarm.data.dao
 
 import androidx.room.*
 import br.com.amd.medsalarm.data.model.MedsAlarmEntity
+import br.com.amd.medsalarm.data.model.MedsAlarmWithHistoryEntity
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
@@ -18,6 +19,10 @@ interface MedsAlarmDao {
 
     @Query("SELECT * FROM meds_alarm WHERE enabled = 'true'")
     fun getEnabledAlarms(): List<MedsAlarmEntity>
+
+    @Transaction
+    @Query("SELECT * FROM meds_alarm")
+    fun getAlarmsWithHistory(): List<MedsAlarmWithHistoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveOrUpdate(alarm: MedsAlarmEntity)

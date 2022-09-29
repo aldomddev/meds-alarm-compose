@@ -4,6 +4,7 @@ import br.com.amd.medsalarm.data.dao.MedsAlarmDao
 import br.com.amd.medsalarm.data.mappers.toDomain
 import br.com.amd.medsalarm.data.mappers.toEntity
 import br.com.amd.medsalarm.domain.model.MedsAlarm
+import br.com.amd.medsalarm.domain.model.MedsAlarmWithHistory
 import br.com.amd.medsalarm.domain.repository.MedsAlarmRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
@@ -32,6 +33,10 @@ class MedsAlarmDataRepository @Inject constructor(
 
     override suspend fun getById(id: Int): MedsAlarm {
         return dao.getAlarmById(id).toDomain()
+    }
+
+    override suspend fun getAlarmsWithHistory(): List<MedsAlarmWithHistory> {
+        return dao.getAlarmsWithHistory().toDomain()
     }
 
     override suspend fun saveOrUpdate(alarm: MedsAlarm) {
