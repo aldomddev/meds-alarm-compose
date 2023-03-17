@@ -4,6 +4,6 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-message "Welcome, Danger." if vsts.pr_author == "aldomddev"
+# message "Welcome, Danger." if github.pr_author == "aldomddev"
 
 # gem "rails"
