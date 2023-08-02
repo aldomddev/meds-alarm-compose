@@ -63,18 +63,16 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    implementation(Deps.accompanistSystemUiController)
     implementation(Deps.androidMaterial)
     implementation(Deps.androidxAppCompat)
     implementation(Deps.androidxCore)
     implementation(Deps.workManager)
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("com.google.android.material:material:1.4.0")
     // for java.time support
     coreLibraryDesugaring(Deps.desugarJdkLibs)
     // date time non-official dialogs
     implementation(Deps.materialDialogsDateTime)
     // libs
+    dependOnAccompanist()
     dependOnCompose()
     dependOnCoroutines()
     dependOnHilt()

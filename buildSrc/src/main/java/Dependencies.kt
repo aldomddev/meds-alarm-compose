@@ -1,6 +1,7 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import java.util.Locale
 import Dependencies.Deps
+import org.gradle.api.artifacts.Dependency
 
 object Dependencies {
 
@@ -29,11 +30,15 @@ object Dependencies {
 
     object Deps {
         const val accompanistSystemUiController = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
+        const val accompanistPermissions = "com.google.accompanist:accompanist-permissions:${Versions.accompanist}"
+        const val accompanistNavigationMaterial = "com.google.accompanist:accompanist-navigation-material:${Versions.accompanist}"
+        const val accompanistNavigationAnimation = "com.google.accompanist:accompanist-navigation-animation:${Versions.accompanist}"
 
         const val androidMaterial = "com.google.android.material:material:${Versions.androidMaterial}"
 
         const val androidxActivityCompose = "androidx.activity:activity-compose:${Versions.androidxActivityCompose}"
         const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
+        const val androidxComposeBom = "androidx.compose:compose-bom:${Versions.composeBom}"
         const val androidxComposeMaterial = "androidx.compose.material:material:${Versions.androidxComposeMaterial}"
         const val androidxComposeRuntimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.androidxComposeUi}"
         const val androidxComposeUi = "androidx.compose.ui:ui:${Versions.androidxComposeUi}"
@@ -83,6 +88,13 @@ object Dependencies {
 }
 
 // region dependencies extensions
+fun DependencyHandler.dependOnAccompanist() {
+    implementation(Deps.accompanistNavigationAnimation)
+    implementation(Deps.accompanistNavigationMaterial)
+    implementation(Deps.accompanistPermissions)
+    implementation(Deps.accompanistSystemUiController)
+}
+
 fun DependencyHandler.dependOnLifecycle() {
     implementation(Deps.androidxLifecycleRuntime)
     implementation(Deps.androidxLifecycleViewModel)
@@ -94,14 +106,15 @@ fun DependencyHandler.dependOnCoroutines() {
 
 fun DependencyHandler.dependOnCompose() {
     implementation(Deps.androidxActivityCompose)
-    implementation(Deps.androidxComposeUi)
-    implementation(Deps.androidxComposeRuntimeLiveData)
-    implementation(Deps.androidxComposeUiViewbinding)
-    implementation(Deps.androidxComposeMaterial)
-    implementation(Deps.androidxComposeUiToolingPreview)
-    implementation(Deps.androidxNavigationCompose)
-    implementation(Deps.androidxHiltNavigationCompose)
-    debugImplementation(Deps.androidxComposeUiTooling)
+    implementation(platform(Deps.androidxComposeBom))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("androidx.compose.ui:ui-viewbinding")
+    implementation("androidx.compose.material:material")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.navigation:navigation-compose")
+    implementation("androidx.hilt:hilt-navigation-compose")
+    debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
 fun DependencyHandler.dependOnHilt() {
@@ -129,10 +142,8 @@ fun DependencyHandler.dependOnTests() {
 }
 // endregion
 
-// region dependencies utils
-private fun DependencyHandler.implementation(depName: String) {
-    add("implementation", depName)
-}
+private fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? =
+    add("implementation", dependencyNotation)
 
 private fun DependencyHandler.debugImplementation(depName: String) {
     add("debugImplementation", depName)
