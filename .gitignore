@@ -42,6 +42,7 @@ captures/
 /out/
 
 # User-specific configurations
+.DS_Store
 .idea/
 .idea/caches/
 .idea/libraries/
