@@ -32,4 +32,11 @@
     <string name="repeat_custom">Outro</string>
 
     <string name="meds_taken_action_button">Ingerido</string>
+
+    <string name="alarm_permission_dialog_title">Alarmes e lembretes</string>
+    <string name="alarm_permission_dialog_text">Para que os alarmes funcionem, é necessário dar permissão para definir alarmes e lembretes. Se essa permissão não for concedida, os alarmes existentes também não funcionarão.</string>
+    <string name="permission_dialog_confirm">Dar permissão</string>
+    <string name="permission_dialog_cancel">Agora não</string>
+
+    <string name="task_notification_permission_dialog_title">Notificações</string>
 </resources>

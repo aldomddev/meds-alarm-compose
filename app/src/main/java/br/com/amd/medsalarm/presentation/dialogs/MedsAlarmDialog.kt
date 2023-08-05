@@ -10,23 +10,26 @@ import br.com.amd.medsalarm.ui.theme.MedsAlarmTheme
 
 @Composable
 fun MedsAlarmDialog(
-    arguments: DialogArguments
+    arguments: DialogArguments,
+    isOpen: Boolean,
 ) {
-    AlertDialog(
-        onDismissRequest = arguments.onDismissAction,
-        title = { Text(text = arguments.title) },
-        text = { Text(text = arguments.text) },
-        confirmButton = {
-            Button(onClick = arguments.onConfirmAction) {
-                Text(text = arguments.confirmationText)
+    if (isOpen) {
+        AlertDialog(
+            onDismissRequest = arguments.onDismissAction,
+            title = { Text(text = arguments.title) },
+            text = { Text(text = arguments.text) },
+            confirmButton = {
+                Button(onClick = arguments.onConfirmAction) {
+                    Text(text = arguments.confirmationText)
+                }
+            },
+            dismissButton = {
+                OutlinedButton(onClick = arguments.onDismissAction) {
+                    Text(text = arguments.dismissText)
+                }
             }
-        },
-        dismissButton = {
-            OutlinedButton(onClick = arguments.onDismissAction) {
-                Text(text = arguments.dismissText)
-            }
-        }
-    )
+        )
+    }
 }
 
 data class DialogArguments(
@@ -51,6 +54,6 @@ fun DialogPreview() {
             onDismissAction = {}
         )
 
-        MedsAlarmDialog(arguments = args)
+        MedsAlarmDialog(arguments = args, isOpen = true)
     }
 }
