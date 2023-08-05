@@ -1,7 +1,7 @@
 package br.com.amd.medsalarm.device.di
 
 import android.content.Context
-import br.com.amd.medsalarm.core.extentions.getAlarmManager
+import br.com.amd.medsalarm.common.extentions.getAlarmManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

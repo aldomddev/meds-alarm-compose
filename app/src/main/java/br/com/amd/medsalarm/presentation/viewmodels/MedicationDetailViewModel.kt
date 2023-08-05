@@ -4,13 +4,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.amd.medsalarm.core.extentions.toState
+import br.com.amd.medsalarm.common.extentions.toState
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager
 import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
 import br.com.amd.medsalarm.domain.model.RepeatingInterval
-import br.com.amd.medsalarm.presentation.mappers.toDomain
 import br.com.amd.medsalarm.presentation.mappers.toPresenter
 import br.com.amd.medsalarm.presentation.model.RepeatingIntervalVO
 import dagger.hilt.android.lifecycle.HiltViewModel

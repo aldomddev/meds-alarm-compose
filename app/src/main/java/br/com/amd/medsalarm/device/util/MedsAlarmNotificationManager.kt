@@ -6,13 +6,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.view.Display
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.constraintlayout.motion.widget.Debug.getState
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import br.com.amd.medsalarm.R
-import br.com.amd.medsalarm.core.extentions.getNotificationManager
+import br.com.amd.medsalarm.common.extentions.getNotificationManager
 import br.com.amd.medsalarm.device.MedsAlarmReceiver
 import br.com.amd.medsalarm.device.model.MedsAlarmNotification
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_TAKEN_ACTION

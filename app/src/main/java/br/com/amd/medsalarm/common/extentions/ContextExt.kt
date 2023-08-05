@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm.core.extentions
+package br.com.amd.medsalarm.common.extentions
 
 import android.app.AlarmManager
 import android.app.NotificationManager

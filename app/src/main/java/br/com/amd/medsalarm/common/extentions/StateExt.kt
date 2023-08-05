@@ -1,4 +1,4 @@
-package br.com.amd.medsalarm.core.extentions
+package br.com.amd.medsalarm.common.extentions
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
