@@ -8,7 +8,7 @@ import androidx.core.app.AlarmManagerCompat
 import br.com.amd.medsalarm.device.mapper.toMedsAlarmNotification
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_ACTION
 import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA
-import br.com.amd.medsalarm.domain.device.AlarmPermission
+import br.com.amd.medsalarm.domain.device.PermissionChecker
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager
 import br.com.amd.medsalarm.domain.model.MedsAlarm
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,12 +19,12 @@ import javax.inject.Inject
 
 class MedsAlarmManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val alarmPermission: AlarmPermission,
+    private val permissionChecker: PermissionChecker,
     private val alarmManager: AlarmManager?
 ) : MedsAlarmManager {
 
     override fun set(alarm: MedsAlarm): LocalDateTime? {
-        if (alarmManager == null || !alarmPermission.hasExactAlarmPermission()) return null
+        if (alarmManager == null || !permissionChecker.hasExactAlarmPermission()) return null
 
         val next = getNextAlarm(alarm)
         next?.let { dateTime ->
@@ -33,19 +33,19 @@ class MedsAlarmManagerImpl @Inject constructor(
             val zoneId = ZoneId.of(ZoneOffset.systemDefault().toString())
             val zoneOffset = zoneId.rules.getOffset(dateTime)
 
-//            AlarmManagerCompat.setExactAndAllowWhileIdle(
-//                alarmManager,
-//                AlarmManager.RTC_WAKEUP,
-//                dateTime.toInstant(zoneOffset).toEpochMilli(),
-//                pendingIntent
-//            )
-
-            AlarmManagerCompat.setAlarmClock(
+            AlarmManagerCompat.setExactAndAllowWhileIdle(
                 alarmManager,
+                AlarmManager.RTC_WAKEUP,
                 dateTime.toInstant(zoneOffset).toEpochMilli(),
-                pendingIntent,
                 pendingIntent
             )
+
+//            AlarmManagerCompat.setAlarmClock(
+//                alarmManager,
+//                dateTime.toInstant(zoneOffset).toEpochMilli(),
+//                pendingIntent,
+//                pendingIntent
+//            )
 
             println("AMD - Alarm set to $dateTime")
         }

@@ -113,12 +113,12 @@ fun DependencyHandler.dependOnCompose() {
     implementation("androidx.compose.material:material")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.navigation:navigation-compose")
-    implementation("androidx.hilt:hilt-navigation-compose")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
 fun DependencyHandler.dependOnHilt() {
     implementation(Deps.hiltAndroid)
+    implementation(Deps.androidxHiltNavigationCompose)
     kapt(Deps.hiltAndroidCompiler)
     dependOnHiltExtensions()
 }
