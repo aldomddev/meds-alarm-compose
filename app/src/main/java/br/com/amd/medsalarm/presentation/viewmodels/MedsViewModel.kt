@@ -11,10 +11,10 @@ import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import br.com.amd.medsalarm.presentation.model.MedsAlarmVO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.Month
@@ -26,7 +26,7 @@ class MedsViewModel @Inject constructor(
     private val deleteAlarmUseCase: DeleteAlarmUseCase
 ) : ViewModel() {
 
-    val viewState: Flow<MedsAlarmListState> = flow {
+    val viewState = flow {
         getAllAlarmsUseCase()
             .catch { exception ->
                 println(exception)
@@ -45,7 +45,11 @@ class MedsViewModel @Inject constructor(
                     emit(MedsAlarmListState.Loaded(newAlarmsList))
                 }
             }
-    }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        MedsAlarmListState.Loading
+    )
 
     fun removeAlarm(alarm: MedsAlarm) {
         viewModelScope.launch(Dispatchers.IO) {

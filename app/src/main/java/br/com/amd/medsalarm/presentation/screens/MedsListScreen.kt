@@ -34,7 +34,8 @@ import java.time.LocalDateTime
 @Composable
 fun MedsListScreen(
     viewState: MedsAlarmListState,
-    onItemClick: (MedsAlarmVO) -> Unit
+    onEditItemRequest: (MedsAlarmVO) -> Unit,
+    onDeleteItemRequest: (MedsAlarmVO) -> Unit
 ) {
     when(viewState) {
         MedsAlarmListState.Empty -> EmptyList()
@@ -42,7 +43,8 @@ fun MedsListScreen(
         is MedsAlarmListState.Loaded -> {
             MedsAlarmList(
                 alarms = viewState.data,
-                onItemClick = onItemClick
+                onEditItemRequest = onEditItemRequest,
+                onDeleteItemRequest = onDeleteItemRequest
             )
         }
         MedsAlarmListState.Loading -> {}
@@ -53,7 +55,8 @@ fun MedsListScreen(
 @Composable
 private fun MedsAlarmList(
     alarms: List<MedsAlarmVO>,
-    onItemClick: (MedsAlarmVO) -> Unit
+    onEditItemRequest: (MedsAlarmVO) -> Unit,
+    onDeleteItemRequest: (MedsAlarmVO) -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -62,7 +65,8 @@ private fun MedsAlarmList(
             items(alarms) { alarm ->
                 MedsAlarmItem(
                     alarmVO = alarm,
-                    onItemClick = onItemClick
+                    onEditItemRequest = onEditItemRequest,
+                    onDeleteItemRequest = onDeleteItemRequest
                 )
             }
         }
@@ -73,7 +77,8 @@ private fun MedsAlarmList(
 @Composable
 private fun MedsAlarmItem(
     alarmVO: MedsAlarmVO,
-    onItemClick: (MedsAlarmVO) -> Unit
+    onEditItemRequest: (MedsAlarmVO) -> Unit,
+    onDeleteItemRequest: (MedsAlarmVO) -> Unit
 ) {
     val showMenuItem = remember { mutableStateOf(false) }
     val position = remember { mutableStateOf(Offset(x = 0f, y = 0f)) }
@@ -81,7 +86,7 @@ private fun MedsAlarmItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = 5.dp,
-        onClick = { onItemClick(alarmVO.copy(action = MedsAlarmActionVO.EDIT)) }
+        onClick = { onEditItemRequest(alarmVO.copy(action = MedsAlarmActionVO.EDIT)) }
     ) {
         Row(
             modifier = Modifier
@@ -127,11 +132,11 @@ private fun MedsAlarmItem(
             expanded = showMenuItem.value,
             offset = DpOffset(x = position.value.x.dp, y = -position.value.y.dp),
             onEditClick = {
-                onItemClick(alarmVO.copy(action = MedsAlarmActionVO.EDIT))
+                onEditItemRequest(alarmVO.copy(action = MedsAlarmActionVO.EDIT))
                 showMenuItem.value = false
             },
             onDeleteClick = {
-                onItemClick(alarmVO.copy(action = MedsAlarmActionVO.DELETE))
+                onDeleteItemRequest(alarmVO.copy(action = MedsAlarmActionVO.DELETE))
                 showMenuItem.value = false
             },
             onDismissRequest = { showMenuItem.value = false }
@@ -219,6 +224,7 @@ private fun MedsAlarmItemPreview() {
             description = "Tomar 30 gotas",
             startsOn = LocalDateTime.now()
         ),
-        onItemClick = {}
+        onEditItemRequest = {},
+        onDeleteItemRequest = {}
     )
 }

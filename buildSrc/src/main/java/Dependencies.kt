@@ -40,6 +40,7 @@ object Dependencies {
         const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
         const val androidxComposeBom = "androidx.compose:compose-bom:${Versions.composeBom}"
         const val androidxComposeMaterial = "androidx.compose.material:material:${Versions.androidxComposeMaterial}"
+        const val androidxComposeLifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-compose:${Versions.androidxComposeLifecycleRuntime}"
         const val androidxComposeRuntimeLiveData = "androidx.compose.runtime:runtime-livedata:${Versions.androidxComposeUi}"
         const val androidxComposeUi = "androidx.compose.ui:ui:${Versions.androidxComposeUi}"
         const val androidxComposeUiViewbinding = "androidx.compose.ui:ui-viewbinding:${Versions.androidxComposeUi}"
@@ -106,6 +107,7 @@ fun DependencyHandler.dependOnCoroutines() {
 
 fun DependencyHandler.dependOnCompose() {
     implementation(Deps.androidxActivityCompose)
+    implementation(Deps.androidxComposeLifecycleRuntime)
     implementation(platform(Deps.androidxComposeBom))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.runtime:runtime-livedata")

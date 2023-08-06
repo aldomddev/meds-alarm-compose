@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -21,7 +22,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import br.com.amd.medsalarm.presentation.mappers.toDomain
-import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
 import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
 import br.com.amd.medsalarm.presentation.navigation.Destination
 import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
@@ -63,47 +63,30 @@ private fun Navigator(navController: NavHostController) {
         composable(Destination.TodayMeds.route) {
             val todayMedsViewModel: TodayMedsViewModel = hiltViewModel()
 
-            val lifecycleOwner = LocalLifecycleOwner.current
-            val alarmsLifecycleAware = remember(todayMedsViewModel.viewState, lifecycleOwner) {
-                todayMedsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            }.collectAsState(initial = MedsAlarmListState.Loading)
+            val alarmsViewState = todayMedsViewModel.viewState.collectAsStateWithLifecycle()
 
             MedsListScreen(
-                viewState = alarmsLifecycleAware.value,
-                onItemClick = { item ->
-                    when(item.action) {
-                       MedsAlarmActionVO.EDIT -> {
-                           navController.navigate(Destination.MedsDetail.route.plus("${item.id}"))
-                       }
-
-                       MedsAlarmActionVO.DELETE -> {
-                           todayMedsViewModel.removeAlarm(item.toDomain())
-                       }
-                    }
+                viewState = alarmsViewState.value,
+                onEditItemRequest = { item ->
+                    navController.navigate(Destination.MedsDetail.route.plus("${item.id}"))
+                },
+                onDeleteItemRequest = { item ->
+                    todayMedsViewModel.removeAlarm(item.toDomain())
                 }
             )
         }
 
         composable(Destination.MyMeds.route) {
             val medsViewModel: MedsViewModel = hiltViewModel()
-
-            val lifecycleOwner = LocalLifecycleOwner.current
-            val alarmsLifecycleAware = remember(medsViewModel.viewState, lifecycleOwner) {
-                medsViewModel.viewState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            }.collectAsState(initial = MedsAlarmListState.Loading)
+            val alarmsViewState = medsViewModel.viewState.collectAsStateWithLifecycle()
 
             MedsListScreen(
-                viewState = alarmsLifecycleAware.value,
-                onItemClick = { item ->
-                    when(item.action) {
-                        MedsAlarmActionVO.EDIT -> {
-                            navController.navigate(Destination.MedsDetail.route.plus("${item.id}"))
-                        }
-
-                        MedsAlarmActionVO.DELETE -> {
-                            medsViewModel.removeAlarm(item.toDomain())
-                        }
-                    }
+                viewState = alarmsViewState.value,
+                onEditItemRequest = { item ->
+                    navController.navigate(Destination.MedsDetail.route.plus("${item.id}"))
+                },
+                onDeleteItemRequest = { item ->
+                    medsViewModel.removeAlarm(item.toDomain())
                 }
             )
         }
