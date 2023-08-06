@@ -23,7 +23,7 @@ import androidx.navigation.navArgument
 import br.com.amd.medsalarm.presentation.mappers.toDomain
 import br.com.amd.medsalarm.presentation.model.MedsAlarmActionVO
 import br.com.amd.medsalarm.presentation.model.MedsAlarmListState
-import br.com.amd.medsalarm.presentation.model.NavigationItem
+import br.com.amd.medsalarm.presentation.navigation.Destination
 import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
 import br.com.amd.medsalarm.presentation.viewmodels.MedsViewModel
 import br.com.amd.medsalarm.presentation.viewmodels.TodayMedsViewModel
@@ -44,7 +44,7 @@ fun MainScreen(title: String) {
             GetFloatingActionButton(
                 navController = navController,
                 fabShape = fabShape,
-                onAddButtonClicked = { navController.navigate(NavigationItem.MedsDetail.route) }
+                onAddButtonClicked = { navController.navigate(Destination.MedsDetail.route) }
             )
         },
         bottomBar = { BottomBar(navController = navController, fabShape = fabShape) },
@@ -58,9 +58,9 @@ fun MainScreen(title: String) {
 @ExperimentalMaterialApi
 @Composable
 private fun Navigator(navController: NavHostController) {
-    NavHost(navController, startDestination = NavigationItem.TodayMeds.route) {
+    NavHost(navController, startDestination = Destination.TodayMeds.route) {
 
-        composable(NavigationItem.TodayMeds.route) {
+        composable(Destination.TodayMeds.route) {
             val todayMedsViewModel: TodayMedsViewModel = hiltViewModel()
 
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -73,7 +73,7 @@ private fun Navigator(navController: NavHostController) {
                 onItemClick = { item ->
                     when(item.action) {
                        MedsAlarmActionVO.EDIT -> {
-                           navController.navigate(NavigationItem.MedsDetail.route.plus("${item.id}"))
+                           navController.navigate(Destination.MedsDetail.route.plus("${item.id}"))
                        }
 
                        MedsAlarmActionVO.DELETE -> {
@@ -84,7 +84,7 @@ private fun Navigator(navController: NavHostController) {
             )
         }
 
-        composable(NavigationItem.MyMeds.route) {
+        composable(Destination.MyMeds.route) {
             val medsViewModel: MedsViewModel = hiltViewModel()
 
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -97,7 +97,7 @@ private fun Navigator(navController: NavHostController) {
                 onItemClick = { item ->
                     when(item.action) {
                         MedsAlarmActionVO.EDIT -> {
-                            navController.navigate(NavigationItem.MedsDetail.route.plus("${item.id}"))
+                            navController.navigate(Destination.MedsDetail.route.plus("${item.id}"))
                         }
 
                         MedsAlarmActionVO.DELETE -> {
@@ -109,7 +109,7 @@ private fun Navigator(navController: NavHostController) {
         }
 
         composable(
-            route = NavigationItem.MedsDetail.route.plus("{id}"),
+            route = Destination.MedsDetail.route.plus("{id}"),
             arguments = listOf(navArgument(name = "id") {
                     type = NavType.IntType
                     defaultValue = 0
@@ -170,7 +170,7 @@ private fun BottomBar(
     if (showBottomBar(navController)) {
         BottomNavigationBar(
             navController = navController,
-            navigationItems = listOf(NavigationItem.TodayMeds, NavigationItem.MyMeds),
+            destinations = listOf(Destination.TodayMeds, Destination.MyMeds),
             cutoutShape = fabShape,
             onItemClicked = { destination ->
                 navController.navigate(destination.route) {
@@ -210,5 +210,5 @@ private fun GetFloatingActionButton(
 @Composable
 private fun showBottomBar(navController: NavController): Boolean {
     val navBackStackEntry = navController.currentBackStackEntryAsState()
-    return navBackStackEntry.value?.destination?.route?.contains(NavigationItem.MedsDetail.route) == false
+    return navBackStackEntry.value?.destination?.route?.contains(Destination.MedsDetail.route) == false
 }

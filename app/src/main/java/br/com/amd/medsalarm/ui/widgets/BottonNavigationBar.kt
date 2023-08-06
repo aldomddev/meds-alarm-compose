@@ -14,14 +14,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import br.com.amd.medsalarm.presentation.model.NavigationItem
+import br.com.amd.medsalarm.presentation.navigation.Destination
 
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
-    navigationItems: List<NavigationItem>,
+    destinations: List<Destination>,
     cutoutShape: Shape? = null,
-    onItemClicked: (NavigationItem) -> Unit
+    onItemClicked: (Destination) -> Unit
 ) {
     BottomAppBar(
         cutoutShape = cutoutShape,
@@ -33,7 +33,7 @@ fun BottomNavigationBar(
                 backgroundColor = MaterialTheme.colors.primary,
                 contentColor = Color.White
             ) {
-                navigationItems.forEach { item ->
+                destinations.forEach { item ->
                     BottomNavigationItem(
                         label = { Text(text = stringResource(id = item.title)) },
                         icon = {
