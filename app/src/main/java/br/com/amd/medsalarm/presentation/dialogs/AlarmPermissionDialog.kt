@@ -19,8 +19,8 @@ fun AlarmPermissionDialog(
     val arguments = DialogArguments(
         title = stringResource(id = R.string.alarm_permission_dialog_title),
         text = stringResource(id = R.string.alarm_permission_dialog_text),
-        confirmationText = stringResource(id = R.string.permission_dialog_confirm),
-        dismissText = stringResource(id = R.string.permission_dialog_cancel),
+        confirmationText = stringResource(id = R.string.alarm_permission_dialog_confirm),
+        dismissText = stringResource(id = R.string.alarm_permission_dialog_cancel),
         onConfirmAction = {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val intent = Intent().apply {

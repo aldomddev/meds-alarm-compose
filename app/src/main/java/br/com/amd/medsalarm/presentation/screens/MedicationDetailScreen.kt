@@ -1,5 +1,6 @@
 package br.com.amd.medsalarm.presentation.screens
 
+import android.Manifest
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -22,13 +24,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.amd.medsalarm.R
+import br.com.amd.medsalarm.presentation.dialogs.AlarmPermissionDialog
+import br.com.amd.medsalarm.presentation.dialogs.NotificationPermissionDialog
 import br.com.amd.medsalarm.presentation.model.RepeatingIntervalVO
 import br.com.amd.medsalarm.presentation.viewmodels.MedicationDetailViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
+@Suppress("NewApi")
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MedicationDetailScreen(
     viewModel: MedicationDetailViewModel,
@@ -54,13 +63,28 @@ fun MedicationDetailScreen(
 
     val scrollState = rememberScrollState()
 
+    val context = LocalContext.current
+    AlarmPermissionDialog(
+        context = context,
+        isOpen = viewModel.showExactAlarmDialog,
+        onDismissRequest = { viewModel.showExactAlarmDialog = false }
+    )
+
+    NotificationPermissionDialog(
+        permissionState = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS),
+        isOpen = viewModel.showNotificationDialog,
+        onDismissRequest = { viewModel.showNotificationDialog = false }
+    )
+
     DatePickerDialog(viewModel = viewModel)
     TimePickerDialog(viewModel = viewModel)
 
-    Column(modifier = Modifier
-        .padding(top = 16.dp, bottom = 80.dp, start = 16.dp, end = 16.dp)
-        .fillMaxWidth()
-        .verticalScroll(scrollState)) {
+    Column(
+        modifier = Modifier
+            .padding(top = 16.dp, bottom = 80.dp, start = 16.dp, end = 16.dp)
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+    ) {
 
         // medication
         OutlinedTextField(
@@ -182,7 +206,7 @@ private fun RepeatingIntervalRadioGroup(
         modifier = Modifier
             .padding(top = 16.dp)
             .fillMaxWidth()
-        ) {
+    ) {
         Text(text = stringResource(id = R.string.medication_details_repeat_at_every))
 
         Row(
@@ -261,7 +285,7 @@ private fun DatePickerDialog(
     viewModel: MedicationDetailViewModel
 ) {
     val showDatePickerDialog by viewModel.showDatePickerDialog
-    
+
     val dialogState = rememberMaterialDialogState()
     MaterialDialog(
         dialogState = dialogState,
@@ -372,6 +396,6 @@ fun MedicationDetailScreenPreview() {
             RepeatingIntervalVO.CUSTOM,
         ),
         selectedItem = RepeatingIntervalVO.FOUR,
-        onSelectionChanged = {  }
+        onSelectionChanged = { }
     )
 }

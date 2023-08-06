@@ -1,11 +1,14 @@
 package br.com.amd.medsalarm.presentation.viewmodels
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.amd.medsalarm.common.extentions.toState
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager
+import br.com.amd.medsalarm.domain.device.PermissionChecker
 import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import br.com.amd.medsalarm.domain.model.MedsAlarm
@@ -28,6 +31,7 @@ class MedicationDetailViewModel @Inject constructor(
     private val saveAlarmUseCase: SaveAlarmUseCase,
     private val getAlarmByIdUseCase: GetAlarmByIdUseCase,
     private val alarmManager: MedsAlarmManager,
+    private val permissionChecker: PermissionChecker,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -73,7 +77,12 @@ class MedicationDetailViewModel @Inject constructor(
     private val _alarmSaved = mutableStateOf(false)
     val alarmSaved = _alarmSaved.toState()
 
+    var showExactAlarmDialog by mutableStateOf(false)
+
+    var showNotificationDialog by mutableStateOf(false)
+
     init {
+        hasPermissionsGranted()
         loadAlarmDataForEdition(medsAlarmId = savedStateHandle.get<Int>("id") ?: 0)
     }
 
@@ -91,6 +100,14 @@ class MedicationDetailViewModel @Inject constructor(
         resetEndsDateTimeControl()
         isChoosingStartsOnDateTime = focused
         _showDatePickerDialog.value = focused
+    }
+
+    private fun hasPermissionsGranted(): Boolean {
+        val exactAlarmPermissionGranted = permissionChecker.hasExactAlarmPermission()
+        val notificationPermissionGranted = permissionChecker.hasNotificationPermission()
+        showExactAlarmDialog = !exactAlarmPermissionGranted
+        showNotificationDialog = exactAlarmPermissionGranted && !notificationPermissionGranted
+        return exactAlarmPermissionGranted && notificationPermissionGranted
     }
 
     private fun resetStartsOnDateTimeControl() {
