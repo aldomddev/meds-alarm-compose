@@ -12,6 +12,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 @HiltWorker
 class AlarmSchedulerWorker @AssistedInject constructor(
@@ -25,13 +26,15 @@ class AlarmSchedulerWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val alarmId = inputData.getInt(ALARM_ID, 0)
-
         when {
             alarmId == SCHEDULE_ALL_ALARMS -> {
+                Timber.d("Scheduling all enabled alarms")
+
                 getEnabledAlarmsUseCase().fold(
                     onSuccess = { alarms ->
                         alarms.forEach { alarm ->
-                            medsAlarmManager.set(alarm)
+                            val next = medsAlarmManager.set(alarm)
+                            saveAlarmUseCase(alarm.copy(next = next))
                         }
 
                         Result.success()
@@ -40,6 +43,8 @@ class AlarmSchedulerWorker @AssistedInject constructor(
                 )
             }
             alarmId > 0 -> {
+                Timber.d("Scheduling alarm ID $alarmId")
+
                 getAlarmByIdUseCase(alarmId).fold(
                     onSuccess = { alarm ->
                         val next = medsAlarmManager.set(alarm)
@@ -51,6 +56,7 @@ class AlarmSchedulerWorker @AssistedInject constructor(
                 )
             }
             else -> {
+                Timber.w("Operation not allowed! Cannot set an alarm with ID $alarmId")
                 Result.failure()
             }
         }

@@ -17,7 +17,7 @@ interface MedsAlarmDao {
     @Query("SELECT * FROM meds_alarm WHERE id = :id")
     fun getAlarmById(id: Int): MedsAlarmEntity
 
-    @Query("SELECT * FROM meds_alarm WHERE enabled = 'true'")
+    @Query("SELECT * FROM meds_alarm WHERE enabled = 1")
     fun getEnabledAlarms(): List<MedsAlarmEntity>
 
     @Transaction

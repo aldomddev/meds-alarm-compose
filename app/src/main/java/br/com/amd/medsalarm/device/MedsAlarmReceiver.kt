@@ -4,6 +4,7 @@ import android.app.AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHA
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.work.WorkManager
 import br.com.amd.medsalarm.device.extensions.isScreenOn
 import br.com.amd.medsalarm.device.model.MedsAlarmNotification
@@ -14,97 +15,65 @@ import br.com.amd.medsalarm.domain.interactors.GetAlarmByIdUseCase
 import br.com.amd.medsalarm.domain.interactors.GetEnabledAlarmsUseCase
 import br.com.amd.medsalarm.domain.interactors.SaveAlarmUseCase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import timber.log.Timber
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MedsAlarmReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var notificationManager: MedsAlarmNotificationManager
-
-    @Inject lateinit var getEnabledAlarmsUseCase: GetEnabledAlarmsUseCase
-    @Inject lateinit var getAlarmByIdUseCase: GetAlarmByIdUseCase
-    @Inject lateinit var saveAlarmUseCase: SaveAlarmUseCase
-    @Inject lateinit var medsAlarmManager: MedsAlarmManager
-    val coroutineScope = CoroutineScope(SupervisorJob())
+    @Inject
+    lateinit var notificationManager: MedsAlarmNotificationManager
+    @Inject
+    lateinit var getEnabledAlarmsUseCase: GetEnabledAlarmsUseCase
+    @Inject
+    lateinit var getAlarmByIdUseCase: GetAlarmByIdUseCase
+    @Inject
+    lateinit var saveAlarmUseCase: SaveAlarmUseCase
+    @Inject
+    lateinit var medsAlarmManager: MedsAlarmManager
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        println("AMD - Alarm fired! Action = ${intent?.action}, screen on = ${context.isScreenOn()}")
+        Timber.i("Alarm fired! Action = ${intent?.action}, screen on = ${context.isScreenOn()}")
 
-        if (context == null) return
-
-//        coroutineScope.launch {
-//            handleAction(intent)
-//        }
+        if (context == null || intent == null) return
 
         try {
-            when(intent?.action) {
+            when (intent.action) {
                 DeviceConstants.MEDS_ALARM_ACTION -> {
-                    val alarm = intent.getParcelableExtra<MedsAlarmNotification>(DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA)
+                    val alarm = getAlarmParcelableDataFromIntent(intent)
                     alarm?.let {
                         notificationManager.createMedsAlarmNotification(alarm)
                         val workRequest = AlarmSchedulerWorker.schedule(alarmId = alarm.id)
                         WorkManager.getInstance(context).enqueue(workRequest)
                     }
                 }
+
                 DeviceConstants.MEDS_TAKEN_ACTION -> {
                     val alarmId = intent.getIntExtra(DeviceConstants.MEDS_TAKEN_ALARM_ID_EXTRA, 0)
                     notificationManager.cancelNotification(alarmId)
                 }
+
                 ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
-                    val workRequest = AlarmSchedulerWorker.schedule(alarmId = DeviceConstants.SCHEDULE_ALL_ALARMS)
+                    val workRequest = AlarmSchedulerWorker.schedule(
+                        alarmId = DeviceConstants.SCHEDULE_ALL_ALARMS
+                    )
                     WorkManager.getInstance(context).enqueue(workRequest)
                 }
             }
         } catch (error: Throwable) {
-            println(error)
+            Timber.e(error)
         }
     }
 
-    private suspend fun handleAction(intent: Intent?) {
-        when(intent?.action) {
-            DeviceConstants.MEDS_ALARM_ACTION -> {
-                val alarm = intent.getParcelableExtra<MedsAlarmNotification>(DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA)
-                alarm?.let {
-                    notificationManager.createMedsAlarmNotification(alarm)
-
-                    if (alarm.id == DeviceConstants.SCHEDULE_ALL_ALARMS) {
-                        scheduleAllAlarms()
-                    } else if (alarm.id > 0) {
-                        scheduleAlarm(alarm.id)
-                    }
-                }
-            }
-            DeviceConstants.MEDS_TAKEN_ACTION -> {
-                val alarmId = intent.getIntExtra(DeviceConstants.MEDS_TAKEN_ALARM_ID_EXTRA, 0)
-                notificationManager.cancelNotification(alarmId)
-            }
-            ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
-                scheduleAllAlarms()
-            }
+    private fun getAlarmParcelableDataFromIntent(intent: Intent): MedsAlarmNotification? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(
+                DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA,
+                MedsAlarmNotification::class.java
+            )
+        } else {
+            intent.getParcelableExtra(DeviceConstants.MEDS_ALARM_NOTIFICATION_EXTRA)
         }
-    }
-
-    private suspend fun scheduleAlarm(alarmId: Int) {
-        getAlarmByIdUseCase(alarmId).fold(
-            onSuccess = { alarm ->
-                val next = medsAlarmManager.set(alarm)
-                saveAlarmUseCase(alarm.copy(next = next))
-            },
-            onFailure = { }
-        )
-    }
-
-    private suspend fun scheduleAllAlarms() {
-        getEnabledAlarmsUseCase().fold(
-            onSuccess = { alarms ->
-                alarms.forEach { alarm ->
-                    medsAlarmManager.set(alarm)
-                }
-            },
-            onFailure = { }
-        )
     }
 }

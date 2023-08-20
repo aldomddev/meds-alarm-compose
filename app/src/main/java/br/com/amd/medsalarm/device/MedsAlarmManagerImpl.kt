@@ -11,7 +11,9 @@ import br.com.amd.medsalarm.device.util.DeviceConstants.MEDS_ALARM_NOTIFICATION_
 import br.com.amd.medsalarm.domain.device.PermissionChecker
 import br.com.amd.medsalarm.domain.device.MedsAlarmManager
 import br.com.amd.medsalarm.domain.model.MedsAlarm
+import br.com.amd.medsalarm.domain.model.RepeatingIntervalUnit
 import dagger.hilt.android.qualifiers.ApplicationContext
+import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -24,7 +26,17 @@ class MedsAlarmManagerImpl @Inject constructor(
 ) : MedsAlarmManager {
 
     override fun set(alarm: MedsAlarm): LocalDateTime? {
-        if (alarmManager == null || !permissionChecker.hasExactAlarmPermission()) return null
+        if (alarmManager == null) {
+            Timber.d("Cannot set alarm: alarmManager is null.")
+            return null
+        }
+
+        if (!permissionChecker.hasExactAlarmPermission()) {
+            Timber.d("Cannot set alarm: hasExactAlarmPermission was revoked.")
+            return null
+        }
+
+        Timber.d("Setting alarm for id ${alarm.id}")
 
         val next = getNextAlarm(alarm)
         next?.let { dateTime ->
@@ -40,14 +52,7 @@ class MedsAlarmManagerImpl @Inject constructor(
                 pendingIntent
             )
 
-//            AlarmManagerCompat.setAlarmClock(
-//                alarmManager,
-//                dateTime.toInstant(zoneOffset).toEpochMilli(),
-//                pendingIntent,
-//                pendingIntent
-//            )
-
-            println("AMD - Alarm set to $dateTime")
+            Timber.d("Alarm ID ${alarm.id} set to $dateTime")
         }
 
         return next
@@ -75,22 +80,47 @@ class MedsAlarmManagerImpl @Inject constructor(
     }
 
     override fun getNextAlarm(alarm: MedsAlarm) : LocalDateTime? {
-        val isAllowedToSchedule = alarm.enabled && alarm.endsOn == null || alarm.endsOn?.isAfter(LocalDateTime.now()) == true
-        val nextAlarmIsValid = alarm.next?.isAfter(LocalDateTime.now()) == true
+        val timeNow = LocalDateTime.now()
+        val isAllowedToSchedule = alarm.enabled && (alarm.endsOn == null || alarm.endsOn.isAfter(timeNow))
+        val nextAlarmIsValid = alarm.next?.isAfter(timeNow) == true // if false, we have a missed alarm
+
+        Timber.d("isAllowedToSchedule=$isAllowedToSchedule, nextAlarmIsValid=$nextAlarmIsValid")
 
         return if (isAllowedToSchedule) {
             when {
                 nextAlarmIsValid -> { alarm.next }
                 else -> alarm.startsOn?.let { startsOnDateTime ->
-                    if (startsOnDateTime.isAfter(LocalDateTime.now())) {
+                    if (startsOnDateTime.isAfter(timeNow)) {
                         startsOnDateTime
                     } else {
-                        alarm.next?.plusHours(alarm.repeatingInterval.toLong())
+                        var next = alarm.next ?: startsOnDateTime
+
+                        do {
+                            next = updateAlarmTime(
+                                nextAlarm = next,
+                                repeatingValue = alarm.repeatingInterval,
+                                repeatingIntervalUnit = alarm.repeatingIntervalUnit
+                            )
+                        } while (timeNow.isAfter(next))
+
+                        next
                     }
                 }
             }
         } else {
             null
+        }
+    }
+
+    private fun updateAlarmTime(
+        nextAlarm: LocalDateTime,
+        repeatingValue: Int,
+        repeatingIntervalUnit: RepeatingIntervalUnit
+    ): LocalDateTime {
+        return when (repeatingIntervalUnit) {
+            RepeatingIntervalUnit.MINUTE -> nextAlarm.plusMinutes(repeatingValue.toLong())
+            RepeatingIntervalUnit.HOUR -> nextAlarm.plusHours(repeatingValue.toLong())
+            RepeatingIntervalUnit.DAY -> nextAlarm.plusDays(repeatingValue.toLong())
         }
     }
 }
